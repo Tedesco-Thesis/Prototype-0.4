@@ -1,0 +1,51 @@
+/* journey.css — the 0.7 layer. Neutral on purpose: it sits on top of every era skin. */
+#jyBtn { position: fixed; left: 10px; bottom: 44px; z-index: 40; font-size: 12px; }
+#jyBtn[hidden] { display: none; }
+#win-things .jy-body { padding: 8px 10px; max-height: 70vh; overflow: auto; font-size: 13px; line-height: 1.45; }
+.jy-tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+.jy-tabs .btn-95.active { border-style: inset; font-weight: bold; }
+.jy-era { margin: 6px 0; }
+.jy-help { font-size: 12px; color: #444; margin: 4px 0; }
+.jy-list, .jy-log { list-style: none; margin: 6px 0; padding: 0; }
+.jy-row { display: block; width: 100%; text-align: left; padding: 6px 8px; margin: 3px 0; background: #fff; border: 1px solid #808080; cursor: pointer; font: inherit; color: inherit; }
+.jy-row:hover, .jy-row:focus-visible { background: #eef; }
+.jy-row span { display: block; font-size: 12px; color: #444; }
+.jy-log li { font-size: 12px; padding: 2px 0; border-bottom: 1px dotted #aaa; } .jy-log li span { color: #666; margin-right: 6px; }
+.jy-b { display: inline-block; font-size: 10px; padding: 0 5px; border: 1px solid #666; background: #eee; margin-left: 4px; vertical-align: middle; }
+.jy-b.ok { background: #dfd; } .jy-b.f-gone { background: #ddd; color: #444; } .jy-b.f-degraded { background: #ffd; } .jy-b.f-gated { background: #fdd; } .jy-b.f-displaced { background: #def; }
+.jy-card { background: #fff; border: 1px solid #808080; padding: 8px 10px; margin: 8px 0; }
+.jy-card.gone { background: #eee; color: #555; } .jy-card.degraded { filter: grayscale(1); } .jy-card.displaced { border-style: dashed; }
+.jy-card.gated { background: #fff6f0; }
+.jy-line { font-style: italic; }
+.jy-result { background: #ffffe1; border: 1px solid #aa8; padding: 6px 8px; margin: 6px 0; }
+.jy-plans { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; } .jy-plans span { border: 1px solid #888; padding: 4px 6px; background: #eee; color: #777; font-size: 12px; }
+.jy-prof { border: 1px solid #aaa; background: #fafafa; padding: 6px 8px; margin: 6px 0; } .jy-prof h4 { margin: 0 0 3px; }
+.jy-yours { border-left: 3px solid #060; padding-left: 6px; color: #030; }
+.jy-opt { display: block; margin: 6px 0; font-size: 12px; } .jy-opt .field { display: block; width: 100%; margin-top: 3px; }
+.jy-say { min-height: 1.2em; font-size: 12px; color: #060; margin-top: 4px; }
+/* arrival and scenes */
+#jyModal { position: fixed; inset: 0; z-index: 9000; background: rgba(0,0,0,.55); display: flex; align-items: center; justify-content: center; padding: 14px; }
+#jyModal[hidden] { display: none; }
+.jy-sheet { background: #f2efe6; color: #111; border: 2px solid #000; box-shadow: 6px 6px 0 rgba(0,0,0,.4); max-width: 560px; width: 100%; max-height: 92vh; overflow: auto; padding: 16px 18px; font: 14px/1.5 Georgia, 'Times New Roman', serif; outline: none; }
+.jy-sheet h2 { margin: 2px 0 8px; font-size: 20px; } .jy-sheet h3 { font-size: 14px; margin: 12px 0 4px; }
+.jy-kick { font: 11px/1 monospace; text-transform: uppercase; letter-spacing: .08em; color: #555; margin: 0; }
+.jy-picks { list-style: none; padding: 0; margin: 8px 0; }
+.jy-picks li { padding: 5px 0; border-bottom: 1px dotted #999; }
+.jy-pick { display: block; cursor: pointer; } .jy-pick small, .jy-picks li > small { display: block; color: #444; font-size: 12px; margin-left: 22px; }
+.jy-pick input:disabled + b { opacity: .5; }
+.jy-count { font: 12px monospace; margin: 4px 0; }
+.jy-btns { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+.jy-go { font-weight: bold; }
+.jy-sheet .jy-b { background: #ddd; }
+/* writing: 2024 suggests, 2030 asks */
+.jy-polish { margin: 6px 0; padding: 6px 8px; font-size: 12px; border: 1px solid #888; background: #f6f6f6; }
+.jy-polish[hidden] { display: none; }
+.jy-polish.p2024 { background: #eef4ff; } .jy-polish.p2030 { background: #f4fff0; }
+.jy-polish small { display: block; color: #555; margin-top: 3px; }
+.jy-polish a { font-size: 11px; color: #777; margin-left: 6px; }
+/* the black box: in 2024 the "why it is here" panel stops saying why. it comes back in 2030. */
+body.era-2024 .st-why { font-size: 0; }
+body.era-2024 .st-why::before { content: 'why it is here: not shown'; font-size: 12px; color: #777; font-style: italic; }
+body.era-2024 .ts-why { font-size: 0; }
+body.era-2024 .ts-why::before { content: 'why: not shown'; font-size: 11px; color: #777; font-style: italic; }
+@media (max-width: 700px) { #jyBtn { bottom: 40px; left: 6px; } #win-things .jy-body { max-height: calc(100vh - var(--chrome-h, 76px) - 100px); } }
