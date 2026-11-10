@@ -66,9 +66,12 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
   await p.evaluate(() => openWindow('win-mail')); 
   await p.fill('#mailText', 'i think maybe sorry, i just wanted to say hello to you properly');
   ok(/suggested/.test(await p.textContent('#jyPolish')), '2024 suggests a rewrite while writing');
+  ok(await p.evaluate(() => { const e = document.getElementById('jyPolish'), t = document.getElementById('mailText'), f = document.querySelector('#win-mail .ai-foot'), r = e.getBoundingClientRect(), tr = t.getBoundingClientRect(), fr = f.getBoundingClientRect(); return r.height > 20 && r.bottom <= fr.top + 1 && tr.bottom <= fr.top + 1 && tr.top >= 0; }), '2024 suggestion and the letter box are both visible above the pinned footer');
   await p.click('[data-p=use]'); ok(!/maybe/.test(await p.inputValue('#mailText')), 'accepting replaces their words');
   await p.evaluate(() => setEra('2030')); await p.fill('#mailText', 'something longer to trigger a question here please');
   ok(/mote asks/.test(await p.textContent('#jyPolish')), '2030 asks instead');
+  await p.waitForTimeout(800);
+  ok(await p.evaluate(() => { if (typeof focusWindow === 'function') focusWindow('win-mail'); const e = document.getElementById('jyPolish'); e.scrollIntoView({ block: 'center' }); const r = e.getBoundingClientRect(); const t = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); return !!t && e.contains(t); }), '2030 question is actually visible');
   const val = await p.inputValue('#mailText'); ok(val.startsWith('something longer'), '2030 never edits their text');
   // reveal
   await p.evaluate(() => Journey.open('noticed')); const rv = await p.textContent('#jyMain');

@@ -326,14 +326,16 @@
   function polishUpdate() {
     const box = $('#jyPolish'), ta = $('#mailText'); if (!ta) return;
     const host = ta.parentNode; let el = box;
-    if (!el) { el = document.createElement('div'); el.id = 'jyPolish'; el.setAttribute('role', 'status'); ta.after(el); }
-    const k = curKey(), txt = ta.value.trim();
+    if (!el) { el = document.createElement('div'); el.id = 'jyPolish'; el.setAttribute('role', 'status'); ta.before(el); }
+    const k = curKey(), txt = ta.value.trim(); let keepInView = false;
     if (k === '2024' && txt.length > 12) {
       const sug = applyPolish(txt);
       if (sug && sug !== txt) {
         if (sug !== lastSug) { lastSug = sug; J.polish.shown++; save(); }
         el.className = 'jy-polish p2024'; el.hidden = false;
+        keepInView = true;
         el.innerHTML = '<b>suggested:</b> ' + esc(sug) + '<div><button type="button" class="btn-95 jy-go" data-p="use">use suggestion</button> <a href="#" data-p="keep">keep mine</a></div><small>a short list of plain rules that removes hedges and apologies. it will not tell you what it removed.</small>';
+        try { ta.scrollIntoView({ block: 'nearest' }); } catch (e) { /* older browser */ }
         return;
       }
     }
@@ -341,7 +343,9 @@
       const qi = Math.floor(txt.length / 40) % C.NOUS.length;
       if (qi !== lastAsk) { lastAsk = qi; J.asks.shown++; save(); }
       el.className = 'jy-polish p2030'; el.hidden = false;
+      keepInView = true;
       el.innerHTML = '<b>mote asks:</b> ' + esc(C.NOUS[qi]) + '<div><input class="field" id="jyAnswer" placeholder="answer, or leave it" aria-label="your answer to the question"> <button type="button" class="btn-95" data-p="answered">answered</button></div><small>it asks and writes nothing. your answer is not kept.</small>';
+      try { ta.scrollIntoView({ block: 'nearest' }); } catch (e) { /* older browser */ }
       return;
     }
     el.hidden = true; el.innerHTML = '';
