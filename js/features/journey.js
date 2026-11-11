@@ -96,6 +96,68 @@
     const k = curKey(), n = (C.THINGS[k] || []).length;
     b.textContent = '◆ things in ' + eraOf(k).label + (n ? ' (' + n + ')' : '');
     b.hidden = !n;
+    pocket();
+  }
+
+  /* ---------------- personality: objects, mote, the box, sounds ----------------
+     Every thing is drawn as the kind of object it was (a page, a floppy, a polaroid, a sticky note...),
+     mote narrates the transitions, and what you carry sits in a box with three slots. */
+  const OBJ = {
+    page: ['paper', '📄'], document: ['paper', '📜'], text: ['paper', '✍️'], directory: ['card', '📇'], list: ['card', '📋'],
+    tool: ['floppy', '💾'], idea: ['sticky', '💡'], links: ['sticky', '🔗'], ad: ['banner', '📢'], form: ['card', '🧾'],
+    feed: ['tape', '📰'], video: ['tape', '📼'], control: ['key', '🔘'], forum: ['card', '💬'], photo: ['polaroid', '📷'], record: ['folder', '🗂️'],
+  };
+  const objOf = (t) => OBJ[t.kind] || ['card', '◆'];
+  function objHTML(t, extra) {
+    const [shape, glyph] = objOf(t);
+    return '<span class="jy-obj o-' + shape + (extra ? ' ' + extra : '') + '" aria-hidden="true"><i>' + glyph + '</i><b>' + esc(t.title) + '</b><em>' + esc(eraOf(t.era).label) + '</em></span>';
+  }
+  const MOTE = '<svg class="jy-mote-svg" viewBox="0 0 16 16" width="48" height="48" shape-rendering="crispEdges" aria-hidden="true">' +
+    '<rect x="6" y="0" width="4" height="2" fill="#cc0000"/><rect x="7" y="2" width="2" height="2" fill="#1b1b3a"/>' +
+    '<rect x="3" y="4" width="10" height="1" fill="#1b1b3a"/><rect x="3" y="13" width="10" height="1" fill="#1b1b3a"/>' +
+    '<rect x="2" y="5" width="1" height="8" fill="#1b1b3a"/><rect x="13" y="5" width="1" height="8" fill="#1b1b3a"/>' +
+    '<rect x="3" y="5" width="10" height="8" fill="#efe6c8"/><rect x="4" y="7" width="3" height="3" fill="#fff"/><rect x="9" y="7" width="3" height="3" fill="#fff"/>' +
+    '<rect x="5" y="8" width="1" height="1" fill="#1b1b3a"/><rect x="10" y="8" width="1" height="1" fill="#1b1b3a"/>' +
+    '<rect class="jy-mouth" x="7" y="11" width="2" height="1" fill="#1b1b3a"/><rect x="3" y="10" width="1" height="1" fill="#f0a0b8"/><rect x="12" y="10" width="1" height="1" fill="#f0a0b8"/>' +
+    '<rect x="4" y="14" width="2" height="1" fill="#1b1b3a"/><rect x="10" y="14" width="2" height="1" fill="#1b1b3a"/></svg>';
+  const RM = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // mote speaks: the whole line is in the DOM for screen readers; the typing is decoration
+  function moteHTML(lines, mood) {
+    return '<div class="jy-mote' + (mood ? ' m-' + mood : '') + '">' + MOTE + '<p class="jy-bubble" data-type="' + esc(lines.join(' ')) + '">' + esc(lines.join(' ')) + '</p></div>';
+  }
+  function typeMote(root) {
+    const p = $('.jy-bubble', root); if (!p || RM()) return;
+    const full = p.dataset.type; let i = 0; p.setAttribute('aria-label', full); p.textContent = '';
+    const tick = () => { if (!p.isConnected) return; i += 2; p.textContent = full.slice(0, i); if (i < full.length) setTimeout(tick, 18); else p.classList.add('done'); };
+    tick();
+  }
+  // the scene's stage: a small animated set for each transition (pure CSS; see journey.css)
+  const STAGE = {
+    weather: '<div class="st-weather"><i class="rain"></i><i class="flash"></i><b class="tower"><u></u><u></u><u></u></b><span class="pg">📄</span><em>SERVER ROOM B · 1993</em></div>',
+    trust: '<div class="st-trust"><b class="door"><u>MEMBERS</u></b><i class="rope"></i><i class="post p1"></i><i class="post p2"></i><span class="lock">🔒</span><em>sign in to continue ▸</em></div>',
+    pages: '<div class="st-pages"><b class="mine"><u>✨ my page ✨</u><i>♥ ★ ♫ ~*~</i></b><b class="tpl"><u></u><u></u><u></u><u></u></b><em>profile.php?id=</em></div>',
+    feeds: '<div class="st-feeds"><b class="thread"><u>re: re: anyone still here?</u><u>re: yes!!</u><u>re: always</u></b><b class="stream"><i></i><i></i><i></i><i></i><i></i><i></i></b><em>for you ▾</em></div>',
+    writing: '<div class="st-writing"><p class="mine">i wanted to say thank you, and i’m not sure how</p><p class="ghost">Thank you for your support!</p><i class="caret"></i><em>✦ rewrite</em></div>',
+  };
+  // tiny sounds, only when the visitor has turned sound on
+  function sfx(kind) {
+    if (!window.Sound || !Sound.on) return;
+    try {
+      const a = sfx.ac || (sfx.ac = new (window.AudioContext || window.webkitAudioContext)()); const t = a.currentTime;
+      const o = a.createOscillator(), g = a.createGain(); o.connect(g).connect(a.destination);
+      const P = { drop: [180, 90, 0.12, 'triangle'], lift: [240, 360, 0.1, 'sine'], stamp: [90, 50, 0.16, 'square'], open: [520, 700, 0.08, 'sine'] }[kind] || [300, 300, 0.05, 'sine'];
+      o.type = P[3]; o.frequency.setValueAtTime(P[0], t); o.frequency.exponentialRampToValueAtTime(P[1], t + P[2]);
+      g.gain.setValueAtTime(0.06, t); g.gain.exponentialRampToValueAtTime(0.0001, t + P[2] + 0.05); o.start(t); o.stop(t + P[2] + 0.08);
+    } catch (e) { /* no audio here */ }
+  }
+  // what you carry: the things kept at the latest transition, in a box on the desktop
+  function carrying() { const ks = C.CFG.anchors.filter((a) => J.kept[a]); return ks.length ? J.kept[ks[ks.length - 1]].filter((id) => fateOf(id) === 'here') : []; }
+  function pocket() {
+    let p = $('#jyPocket');
+    if (!p) { p = document.createElement('div'); p.id = 'jyPocket'; p.setAttribute('aria-label', 'what you are carrying'); document.body.appendChild(p); p.addEventListener('click', (e) => { const b = e.target.closest('[data-thing]'); if (b) openThings('here', b.dataset.thing); }); }
+    const c = carrying();
+    p.hidden = !c.length || J.mode !== 'on';
+    p.innerHTML = '<span class="jy-pk-l">carrying</span>' + c.map((id) => { const t = byId(id); return '<button type="button" data-thing="' + id + '" title="' + esc(t.title) + '">' + objOf(t)[1] + '<span class="sr">' + esc(t.title) + '</span></button>'; }).join('');
   }
 
   /* ---------------- the things window ---------------- */
@@ -126,14 +188,14 @@
     const k = curKey(), er = eraOf(k), list = C.THINGS[k] || [];
     let h = '<p class="jy-era"><b>' + esc(er.label) + '</b> · ' + esc(er.name || '') + '</p><p class="jy-help">things you can pick up and read in this era. open one for what it was, and poke it. nothing here is counted unless it says so.</p>';
     if (J.mode === 'free') h += '<p class="jy-help">you chose to look around without the journey, so nothing is lost. <a href="#" data-act="join">start it anyway</a></p>';
-    h += list.length ? '<ul class="jy-list">' + list.map((t) => '<li><button class="jy-row" data-thing="' + t.id + '"><b>' + esc(t.title) + '</b> ' + badge(t.id) + '<span>' + esc(t.line) + '</span></button></li>').join('') + '</ul>' : '<p class="ts-empty">nothing is catalogued for this era.</p>';
+    h += list.length ? '<ul class="jy-list">' + list.map((t) => '<li><button class="jy-row" data-thing="' + t.id + '">' + objHTML(t, 'mini') + '<b>' + esc(t.title) + '</b> ' + badge(t.id) + (kept(t.id) && fateOf(t.id) === 'here' ? ' <span class="jy-b ok">carried</span>' : '') + '<span>' + esc(t.line) + '</span></button></li>').join('') + '</ul>' : '<p class="ts-empty">nothing is catalogued for this era.</p>';
     return h;
   }
   function listLeft() {
     const ids = Object.keys(J.lost);
     let h = '<p class="jy-help">what each era did not carry forward, and how. nothing is deleted from your browser: these were never yours to lose; they are samples. this is how the journey shows loss.</p>';
     if (!ids.length) return h + '<p class="ts-empty">nothing yet. the first transition is into 1993.</p>';
-    return h + '<ul class="jy-list">' + ids.map((id) => { const t = byId(id), l = J.lost[id]; return '<li><button class="jy-row" data-thing="' + id + '"><b>' + esc(t.title) + '</b> ' + badge(id) + '<span>' + esc(eraOf(t.era).label) + ' · left behind going into ' + esc(eraOf(l.scene).label) + ' · ' + (reasonOf(id) ? esc(reasonOf(id)) : 'no reason shown') + '</span></button></li>'; }).join('') + '</ul>';
+    return h + '<ul class="jy-list">' + ids.map((id) => { const t = byId(id), l = J.lost[id]; return '<li><button class="jy-row" data-thing="' + id + '">' + objHTML(t, 'mini f-' + l.fate) + '<b>' + esc(t.title) + '</b> ' + badge(id) + '<span>' + esc(eraOf(t.era).label) + ' · left behind going into ' + esc(eraOf(l.scene).label) + ' · ' + (reasonOf(id) ? esc(reasonOf(id)) : 'no reason shown') + '</span></button></li>'; }).join('') + '</ul>';
   }
   function listPeople() {
     let h = '<p class="jy-help"><b>stand-ins.</b> these profiles are invented placeholders for people who were interviewed. each links three things. they will be replaced with the real wording of people who agreed, in the way they chose (named, first name, or anonymous).</p>';
@@ -145,14 +207,14 @@
     const f = fateOf(t.id), l = J.lost[t.id], er = eraOf(t.era);
     let h = '<button class="btn-95" data-act="close-detail">← back</button> <span class="jy-era"><b>' + esc(t.title) + '</b> · ' + esc(er.label) + ' ' + badge(t.id) + '</span>';
     if (f === 'gone') {
-      h += '<article class="jy-card gone"><p><b>this is a record, not the thing.</b></p><p>' + esc(t.title) + ' (' + esc(t.kind) + ', ' + esc(er.label) + ') was here.</p><p class="jy-help">reason: ' + (reasonOf(t.id) ? esc(reasonOf(t.id)) : '<i>not shown</i>') + '</p><p class="jy-help">' + esc(C.FATES.gone.note) + '</p></article>';
+      h += '<article class="jy-card gone">' + objHTML(t, 'big f-gone') + '<p><b>this is a record, not the thing.</b></p><p>' + esc(t.title) + ' (' + esc(t.kind) + ', ' + esc(er.label) + ') was here.</p><p class="jy-help">reason: ' + (reasonOf(t.id) ? esc(reasonOf(t.id)) : '<i>not shown</i>') + '</p><p class="jy-help">' + esc(C.FATES.gone.note) + '</p></article>';
       return h + (window.Viewer ? '<p><button class="btn-95" data-act="trace" data-id="' + t.id + '">open the record</button></p>' : '');
     }
     if (f === 'gated' && !J.unlocked[t.id]) return h + gate(t);
     let ctx = t.ctx, line = t.line, poke = true;
     if (f === 'degraded') { ctx = '[image and formatting removed]'; poke = false; }
     if (f === 'displaced') { ctx = systemVersion(t); poke = false; }
-    h += '<article class="jy-card' + (f !== 'here' ? ' ' + f : '') + '"><p class="jy-line">' + esc(line) + '</p><p>' + esc(ctx) + '</p>' +
+    h += '<article class="jy-card' + (f !== 'here' ? ' ' + f : '') + '">' + objHTML(t, 'big' + (f !== 'here' ? ' f-' + f : '')) + '<p class="jy-line">' + esc(line) + '</p><p>' + esc(ctx) + '</p>' +
       (f === 'displaced' ? '<p class="jy-help"><b>the system’s version.</b> it replaced the original. ' + (curKey() === '2030' ? '<a href="#" data-act="orig" data-id="' + t.id + '">see what it said before</a>' : 'the original is not shown in this era.') + '</p>' : '') +
       (f === 'degraded' ? '<p class="jy-help">' + esc(C.FATES.degraded.note) + '</p>' : '') +
       (t.era === '2030' ? '<p class="jy-help">this is speculative. nothing like it exists yet.</p>' : '') + '</article>';
@@ -170,8 +232,8 @@
   /* ---------------- the reveal ---------------- */
   function reveal() {
     const sc = Object.keys(J.kept);
-    let h = '<p class="jy-help"><b>fiction.</b> this is what a system could read from the choices you made, using plain rules, next to what you actually wrote. it lives in this browser only.</p>';
-    if (!sc.length) return h + '<p class="ts-empty">nothing yet. it only notices at the five transitions. the first is into 1993.</p>';
+    let h = '<div class="jy-dossier"><p class="jy-file">FILE · visitor · <span>profile built from 5 choices</span></p><p class="jy-help"><b>fiction.</b> this is what a system could read from the choices you made, using plain rules, next to what you actually wrote. it lives in this browser only.</p>';
+    if (!sc.length) return h + '<p class="ts-empty">nothing yet. it only notices at the five transitions. the first is into 1993.</p></div>';
     const tally = {}; let keptN = 0, lostN = 0; const lostT = {};
     sc.forEach((s) => J.kept[s].forEach((id) => { const t = byId(id); if (t) { tally[t.theme] = (tally[t.theme] || 0) + 1; keptN++; } }));
     Object.keys(J.lost).forEach((id) => { const t = byId(id); if (t) { lostT[t.theme] = (lostT[t.theme] || 0) + 1; lostN++; } });
@@ -187,7 +249,7 @@
     if (J.going.length) h += '<p class="jy-help">you went back ' + J.going.length + ' time' + (J.going.length === 1 ? '' : 's') + '. a system would call that “churn”. you may have been looking for something.</p>';
     if (J.polish.shown) h += '<p class="jy-help">in 2024 it suggested a rewrite ' + J.polish.shown + ' time' + (J.polish.shown === 1 ? '' : 's') + '. you accepted ' + J.polish.accepted + ' and kept your own ' + J.polish.refused + '.</p>';
     if (J.asks.shown) h += '<p class="jy-help">in 2030 it asked ' + J.asks.shown + ' question' + (J.asks.shown === 1 ? '' : 's') + ' and wrote nothing.</p>';
-    return h + '<p><button class="btn-95" data-act="export">export what it kept (JSON)</button></p>';
+    return h + '<p><button class="btn-95" data-act="export">export what it kept (JSON)</button></p></div>';
   }
   function logTab() {
     let h = '<p class="jy-help">everything the journey itself has recorded. it is local, you can read all of it, and you can erase it.</p>';
@@ -226,14 +288,18 @@
 
   /* ---------------- arrival and scenes ---------------- */
   const modal = () => $('#jyModal');
-  function showModal(html) { build(); const m = modal(); m.innerHTML = '<div class="jy-sheet" tabindex="-1">' + html + '</div>'; m.hidden = false; const s = $('.jy-sheet', m); if (s) s.focus(); }
+  function showModal(html, theme) { build(); const m = modal(); m.className = theme ? 'th-' + theme : ''; m.innerHTML = '<div class="jy-sheet" tabindex="-1">' + html + '</div>'; m.hidden = false; const s = $('.jy-sheet', m); if (s) s.focus(); }
   function hideModal() { const m = modal(); if (m) { m.hidden = true; m.innerHTML = ''; } }
   let queue = [], scene = null;
 
   function arrival(then) {
     const A = C.ARRIVAL;
-    showModal('<h2>' + esc(A.title) + '</h2>' + A.story.map((p) => '<p>' + esc(p) + '</p>').join('') + '<h3>what it keeps, and where</h3><ul>' + A.notes.map((p) => '<li>' + esc(p) + '</li>').join('') + '</ul>' +
-      '<p class="jy-btns"><button class="btn-95 jy-go" data-a="begin">' + esc(A.begin) + '</button> <button class="btn-95" data-a="free">' + esc(A.free) + '</button></p><p class="jy-help">placeholder wording.</p>');
+    showModal('<div class="jy-crt"><div class="jy-screen">' + moteHTML(A.mote || [], 'hello') +
+      '<h2>' + esc(A.title) + '</h2>' + A.story.map((p) => '<p>' + esc(p) + '</p>').join('') + '</div>' +
+      '<aside class="jy-sticky"><h3>' + esc(A.sticky || 'what it keeps, and where') + '</h3><ul>' + A.notes.map((p) => '<li>' + esc(p) + '</li>').join('') + '</ul></aside>' +
+      '<div class="jy-btns"><button class="btn-95 jy-go jy-power" data-a="begin"><span aria-hidden="true">⏻</span> ' + esc(A.begin) + '</button> <button class="btn-95" data-a="free">' + esc(A.free) + '</button></div>' +
+      '<p class="jy-help">placeholder wording.</p></div>', 'arrival');
+    typeMote(modal());
     arrival.then = then;
   }
   function pool(anchor) {
@@ -245,22 +311,29 @@
     const automatic = !C.CFG.perTransition && Object.keys(J.kept).length > 0;
     scene = { anchor, pool: p, need, picked: [], t0: Date.now(), auto: automatic };
     if (automatic) { const carried = p.filter(kept).map((t) => t.id); scene.picked = carried; return finish(true); }
-    const rows = p.map((t) => '<li><label class="jy-pick"><input type="checkbox" data-id="' + t.id + '"> <b>' + esc(t.title) + '</b> <span class="jy-b">' + esc(eraOf(t.era).label) + '</span><small>' + esc(t.line) + ' <i>(' + esc(C.THEMES[t.theme]) + ')</i></small></label></li>').join('');
-    showModal('<p class="jy-kick">moving into ' + esc(eraOf(anchor).label) + ' · ' + esc(eraOf(anchor).name || '') + '</p><h2>' + esc(S.title) + '</h2><p>' + esc(S.intro) + '</p>' +
-      (need < p.length ? '<p><b>you can bring ' + need + '.</b> choose which.</p>' : '<p>you can bring all of them this time.</p>') +
-      '<ul class="jy-picks">' + rows + '</ul><p class="jy-count" role="status" id="jyCount"></p>' +
+    const rows = p.map((t) => '<li><label class="jy-pick"><input type="checkbox" data-id="' + t.id + '"><span class="jy-pick-o">' + objHTML(t) + '</span><small>' + esc(t.line) + ' <i>' + esc(C.THEMES[t.theme]) + '</i></small></label></li>').join('');
+    const slots = Array.from({ length: need }, () => '<span class="jy-slot"></span>').join('');
+    showModal('<div class="jy-stage" aria-hidden="true">' + (STAGE[S.slug] || '') + '</div>' +
+      '<p class="jy-kick">moving into ' + esc(eraOf(anchor).label) + ' · ' + esc(eraOf(anchor).name || '') + '</p><h2>' + esc(S.title) + '</h2>' +
+      moteHTML([S.mote ? S.mote[0] : S.intro]) + '<p class="jy-intro">' + esc(S.intro) + '</p>' +
+      (need < p.length ? '<p class="jy-ask"><b>you can bring ' + need + '.</b> the rest stays behind.</p>' : '<p class="jy-ask">you can bring all of them this time.</p>') +
+      '<ul class="jy-picks">' + rows + '</ul>' +
+      '<div class="jy-boxrow"><div class="jy-box" aria-hidden="true"><span class="jy-box-l">the box</span>' + slots + '</div><p class="jy-count" role="status" id="jyCount"></p></div>' +
       '<label class="jy-opt">why these? <small>(optional. it stays in this browser, and it is the only part of this that is in your words)</small><input class="field" id="jyWhy" maxlength="140"></label>' +
-      '<p class="jy-btns"><button class="btn-95 jy-go" data-a="carry" id="jyCarry" disabled>carry these</button> <button class="btn-95" data-a="delegate">let it choose for me</button></p>');
+      '<p class="jy-btns"><button class="btn-95 jy-go" data-a="carry" id="jyCarry" disabled>carry these</button> <button class="btn-95" data-a="delegate">let it choose for me</button></p>', 'scene th-' + S.slug);
+    typeMote(modal());
     count();
   }
   function count() {
     const picked = $$('#jyModal .jy-picks input:checked'), full = picked.length >= scene.need;
     $$('#jyModal .jy-picks input').forEach((i) => { i.disabled = full && !i.checked; });
-    $('#jyCount').textContent = picked.length + ' of ' + scene.need + ' chosen';
+    $('#jyCount').textContent = picked.length + ' of ' + scene.need + ' in the box';
+    $$('#jyModal .jy-slot').forEach((sl, i) => { const id = picked[i] && picked[i].dataset.id, t = id && byId(id); sl.innerHTML = t ? '<i>' + objOf(t)[1] + '</i><b>' + esc(t.title) + '</b>' : ''; sl.classList.toggle('full', !!t); });
+    $$('#jyModal .jy-pick').forEach((l) => l.classList.toggle('in', l.querySelector('input').checked));
     $('#jyCarry').disabled = picked.length !== scene.need;
   }
   const $$ = (s, r) => Array.from((r || document).querySelectorAll(s));
-  function onModalInput(e) { if (e.target.matches('.jy-picks input')) count(); }
+  function onModalInput(e) { if (e.target.matches('.jy-picks input')) { sfx(e.target.checked ? 'drop' : 'lift'); count(); } }
   function onModalClick(e) {
     const b = e.target.closest('[data-a]'); if (!b) return; const a = b.dataset.a;
     if (a === 'begin') { J.mode = 'on'; log('started the journey'); hideModal(); const t = arrival.then; arrival.then = null; if (t) t(); }
@@ -283,9 +356,17 @@
     log('into ' + eraOf(scene.anchor).label + ': kept ' + scene.picked.map((id) => byId(id).title).join(', ') + (lost.length ? ' · ' + lost.length + ' left behind' : '') + (scene.delegated ? ' (let it choose)' : ''));
     save();
     if (silent) { nextScene(); draw(); return; }
-    const rows = lost.map((t) => '<li><b>' + esc(t.title) + '</b> <span class="jy-b f-' + J.lost[t.id].fate + '">' + esc(C.FATES[J.lost[t.id].fate].label) + '</span><small>' + esc(C.FATES[J.lost[t.id].fate].note) + ' ' + (yearOf(scene.anchor) >= C.CFG.opaqueFrom ? '<i>no reason is shown.</i>' : 'reason: ' + esc(S.reason) + '.') + '</small></li>').join('');
-    showModal('<p class="jy-kick">into ' + esc(eraOf(scene.anchor).label) + '</p><h2>what happened to the rest</h2>' + (lost.length ? '<ul class="jy-picks">' + rows + '</ul>' : '<p>nothing was left behind this time.</p>') +
-      '<p class="jy-help"><b>what this is about.</b> ' + esc(S.why) + '</p><p class="jy-help">you can find what was left behind under “what’s left”. it will be a record, not the thing.</p><p class="jy-btns"><button class="btn-95 jy-go" data-a="next">continue</button></p>');
+    const opaqueNow = yearOf(scene.anchor) >= C.CFG.opaqueFrom;
+    const keptRow = scene.picked.map((id) => '<li class="jy-kept">' + objHTML(byId(id)) + '<span class="jy-stamp s-kept">carried</span></li>').join('');
+    const rows = lost.map((t) => { const f = J.lost[t.id].fate; return '<li class="jy-fate" data-f="' + f + '">' + objHTML(t) + '<span class="jy-stamp s-' + f + '">' + esc(C.FATES[f].label) + '</span><small>' + esc(C.FATES[f].note) + ' ' + (opaqueNow ? '<i>no reason is shown.</i>' : 'reason: ' + esc(S.reason) + '.') + '</small></li>'; }).join('');
+    showModal('<p class="jy-kick">into ' + esc(eraOf(scene.anchor).label) + '</p><h2>what happened to the rest</h2>' +
+      moteHTML([S.mote ? S.mote[1] : S.why], 'after') +
+      '<ul class="jy-aftr">' + keptRow + rows + '</ul>' + (lost.length ? '' : '<p>nothing was left behind this time.</p>') +
+      '<p class="jy-help"><b>what this is about.</b> ' + esc(S.why) + '</p><p class="jy-help">you can find what was left behind under “what’s left”. it will be a record, not the thing.</p><p class="jy-btns"><button class="btn-95 jy-go" data-a="next">continue</button></p>', 'after th-' + S.slug);
+    typeMote(modal());
+    // the fates land one at a time, like stamps (all at once with reduced motion)
+    $$('#jyModal .jy-fate').forEach((li, i) => { if (RM()) li.classList.add('landed'); else setTimeout(() => { li.classList.add('landed'); sfx('stamp'); }, 700 + i * 420); });
+    pocket();
     draw();
   }
   // a scene waits for the era's own arrival (splash, login ritual) to finish, so the visitor sees where they arrived first

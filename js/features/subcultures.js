@@ -278,6 +278,8 @@
     h.terms = () => '<div class="sc-terms"></div>';
     // your own image for this aesthetic: h.asset('hero') or h.asset('graphic'). declared in js/core/assets.js; '' if none yet.
     h.asset = (role, cls) => { h._assetUsed = true; return window.Assets ? Assets.img('culture.' + c.id + '.' + (role || 'hero'), cls || 'sc-asset') : ''; };
+    // the archive layer: a small, closed field note (what it was, when, what kind). every world places one.
+    h.note = (extra) => '<details class="sc-note"><summary>field note \u00b7 ' + h.years + ' \u00b7 ' + h.kind + '</summary><p>' + h.did + '</p>' + (extra ? '<p>' + extra + '</p>' : '') + '<p class="sc-note-src">Wording is a draft. Fonts and colours follow the research notes, not the communities themselves.</p></details>';
     return h;
   }
 
@@ -291,11 +293,13 @@
       // palette + font are set on the window so the whole page (not just the stage) can use them
       const set = (k, v) => win.style.setProperty(k, v);
       c.pal.forEach((x, k) => set('--p' + (k + 1), x));
-      set('--bg', dark ? sorted[0] : sorted[4]); set('--ink', dark ? sorted[4] : sorted[0]); set('--acc', dark ? sorted[3] : sorted[2]);
-      set('--font', c.font);
+      // palette-derived defaults, only where the page's own look file has not set the variable (the look wins)
+      const cs = getComputedStyle(win), dflt = (k, v) => { if (!cs.getPropertyValue(k).trim()) set(k, v); };
+      dflt('--bg', dark ? sorted[0] : sorted[4]); dflt('--ink', dark ? sorted[4] : sorted[0]); dflt('--acc', dark ? sorted[3] : sorted[2]);
+      dflt('--font', c.font);
       win.classList.add('sc-win'); win.dataset.sc = c.id;
       stage.classList.add('sc-stage');
-      if (page && page.w) win.style.width = page.w + 'px';
+      if (page && page.w) { win.style.width = page.w + 'px'; set('--sc-w', page.w + 'px'); }
       const fxLabels = (page && page.fx) || ['turn it up', 'turn it down'];
       const hh = helpers(c);
       stage.innerHTML = page ? page.html(hh) : '<p>' + esc(c.did) + '</p>';
@@ -335,8 +339,49 @@
       const inp = $('.sc-in', stage);
       if (inp) inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') addTerm(); });
       count();
+      // a world: the page's own ritual (what people in this place actually did), wired by the page itself
+      if (page && typeof page.run === 'function') {
+        win.classList.add('sc-world');
+        try { page.run(stage, kit(c, api, win, stage)); } catch (e) { console.error('world ' + c.id, e); }
+      }
     };
   }
+
+  /* ---------- the kit a world's run(stage, k) receives ----------
+     k.act(name, weight, detail)  log something the visitor DID (goes on the receipt, sorted as interest)
+     k.every(ms, fn) / k.after(ms, fn)  timers that only run while the window is open; both return a stop()
+     k.audio()   a shared Web Audio context, created on first use (call it from a click)
+     k.tone(freq, secs, type, vol, toFreq)   one short synthesised note (no files), for worlds that make sound
+     k.onClose(fn)  run fn whenever the window is closed or minimised (stop sound, animation)
+     k.handle    the visitor's name in this session ('anon' if none)
+     k.c, k.esc, k.win, k.stage   the culture record, an escaper, the window and the page
+     Nothing a world does is stored after the page is closed: session only, like the rest of the field guide. */
+  let AC = null;
+  function kit(c, api, win, stage) {
+    const open = () => win.classList.contains('open') && win.style.display !== 'none';
+    const audio = () => { try { if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)(); if (AC.state === 'suspended') AC.resume(); return AC; } catch (e) { return null; } };
+    const closers = [];
+    let wasOpen = open();
+    new MutationObserver(() => { const o = open(); if (wasOpen && !o) closers.forEach((fn) => { try { fn(); } catch (e) { /* keep going */ } }); wasOpen = o; })
+      .observe(win, { attributes: true, attributeFilter: ['class', 'style'] });
+    return {
+      c, esc, win, stage, handle: handle(),
+      onClose: (fn) => { closers.push(fn); },
+      act: (name, w, detail) => api.act(name, w == null ? 1 : w, detail),
+      every: (ms, fn) => { const t = setInterval(() => { if (open()) fn(); }, ms); return () => clearInterval(t); },
+      after: (ms, fn) => { const t = setTimeout(fn, ms); return () => clearTimeout(t); },
+      audio,
+      tone: (f, d, type, v, to) => {
+        if (window.Sound && Sound.muted && Sound.muted()) return;
+        const a = audio(); if (!a) return;
+        const o = a.createOscillator(), g = a.createGain(), t0 = a.currentTime;
+        o.type = type || 'sine'; o.frequency.setValueAtTime(f, t0); if (to) o.frequency.exponentialRampToValueAtTime(to, t0 + d);
+        g.gain.setValueAtTime(v == null ? 0.05 : v, t0); g.gain.exponentialRampToValueAtTime(0.0001, t0 + d);
+        o.connect(g).connect(a.destination); o.start(t0); o.stop(t0 + d + 0.02);
+      },
+    };
+  }
+  S.worldKit = kit;
 
   D.forEach((c) => { c.build = build(c); S.addCulture(c); });
 

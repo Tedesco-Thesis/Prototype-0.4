@@ -9,7 +9,7 @@
    CFG                 two switches for the open decisions (going back, how many to keep)
    ARRIVAL             the disclosure + storyline shown once, before the first scene
    THINGS[eraKey]      2-4 explorable things per era: { id, title, kind, theme, line, ctx, poke:[button, result] }
-   SCENES[eraKey]      the five transitions: { title, intro, why, fates:[...], reason }
+   SCENES[eraKey]      the five transitions: { title, intro, why, fates:[...], reason, mote:[before, after] }
    FATES               what each kind of loss means, in plain words
    PROFILES            stand-in interviewee profiles, each with three links to things
    THEMES              the five plain categories a "system" can read from your choices
@@ -39,6 +39,11 @@
       'The systems in this prototype are simulations of how platforms behave, and they say so. The people and wording are placeholders.',
       'You can look around without the journey, read what it kept at any time, export it, or erase it.',
     ],
+    mote: [
+      'hi. i\u2019m mote. i live in this computer.',
+      'it\u2019s going to change a lot. every time it does, i can carry three things for you. you choose which.',
+    ],
+    sticky: 'this computer keeps:',
     begin: 'start the journey',
     free: 'just look around (no choosing)',
   };
@@ -230,35 +235,40 @@
   /* ---------------- the five transitions ---------------- */
   const SCENES = {
     '1993': {
-      slug: 'weather', title: 'the weather',
+      slug: 'weather',
+      mote: ['the server room flooded. nobody\u2019s fault. i can carry three things up the stairs. which ones?', 'that\u2019s it. no notice. no record of the record. just weather.'], title: 'the weather',
       intro: 'A server is wiped. A page nobody backed up is gone. Nobody did this on purpose. The weather changed.',
       why: 'Early loss was accidental and unrecorded. Nothing is left to say it was ever there.',
       fates: ['gone'],
       reason: 'the server was overwritten; no copy was kept',
     },
     '1999': {
-      slug: 'trust', title: 'trust',
+      slug: 'trust',
+      mote: ['the door wants a name and a password now. it will still let us in. some of us, some of the time.', 'it didn\u2019t delete anything. it just put a rope in front.'], title: 'trust',
       intro: 'To get to some things you now have to make an account. They are still here, but not for free.',
       why: 'Access became conditional on who you are willing to be known as. The thing is not deleted, only gated.',
       fates: ['gated', 'gone'],
       reason: 'it moved behind a sign-in; some were not moved',
     },
     '2006': {
-      slug: 'pages', title: 'pages',
+      slug: 'pages',
+      mote: ['everyone gets the same page now. it\u2019s cleaner. it\u2019s also smaller than what you made.', 'it kept your words. it threw away how you said them.'], title: 'pages',
       intro: 'Personal pages become profiles in a template. What is yours is the part that fits.',
       why: 'When a platform replaces a hand-made page with a template, the content survives and the form is flattened.',
       fates: ['degraded', 'gone'],
       reason: 'it did not fit the profile template',
     },
     '2010': {
-      slug: 'feeds', title: 'forums into feeds',
+      slug: 'feeds',
+      mote: ['the forum is moving into the stream. the stream decides what goes on top.', 'your things are still in there somewhere. keep scrolling.'], title: 'forums into feeds',
       intro: 'The place where regulars gathered becomes a stream. Your things are still there, but they are shown the system’s way.',
       why: 'When conversations are moved into a ranked stream, the content is displaced by whatever the system would rather show.',
       fates: ['displaced', 'degraded'],
       reason: 'its place was taken by the stream',
     },
     '2024': {
-      slug: 'writing', title: 'writing',
+      slug: 'writing',
+      mote: ['it offers to write for you now. it is very fast. i\u2019m a little worried about that.', 'i asked it why some of it is missing. it didn\u2019t say.'], title: 'writing',
       intro: 'The system offers to write for you. What you wrote is kept as the system’s version, or not at all.',
       why: 'When a system drafts, summarises or rewrites, the original author is displaced. The reason for what is missing is no longer shown.',
       fates: ['displaced', 'gone', 'gated'],

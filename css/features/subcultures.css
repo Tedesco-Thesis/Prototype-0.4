@@ -87,3 +87,18 @@ html body .window.sc-win[id] .keepbtn.kept { background: var(--acc); color: var(
 /* your own images (declared in js/core/assets.js) */
 .sc-asset { max-width:100%; display:block; }
 .sc-asset-hero { margin:0 auto 10px; max-height:220px; object-fit:contain; }
+
+/* ---- worlds (0.7.1): the field note, the archive layer every world carries ---- */
+html body .window.sc-win .sc-note { margin: 10px 12px 0; font: 11px/1.45 var(--foot-font, var(--font)); color: inherit; opacity: .85; }
+html body .window.sc-win .sc-note summary { cursor: pointer; letter-spacing: .04em; text-transform: lowercase; list-style: none; }
+html body .window.sc-win .sc-note summary::before { content: '\25B8  '; }
+html body .window.sc-win .sc-note[open] summary::before { content: '\25BE  '; }
+html body .window.sc-win .sc-note p { margin: 4px 0 0; }
+html body .window.sc-win .sc-note .sc-note-src { opacity: .7; font-style: italic; }
+@media (prefers-reduced-motion: reduce) { html body .window.sc-win * { animation-duration: 0.001s !important; animation-iteration-count: 1 !important; transition-duration: 0.001s !important; } }
+
+/* each world sets its own width (the global window cap is 540px) */
+html body .window.sc-win[id] { width: min(var(--sc-w, 540px), 94vw) !important; }
+
+/* on a phone, mote steps aside while a field-guide world is open (tap mote again after closing it) */
+@media (max-width: 700px) { body:has(.window.sc-win.open) #guideBox { display: none; } }

@@ -120,5 +120,8 @@ Read `NOTES-0.6.md` for the journey, change log, data model, deletion, limitatio
 
 Load order adds `store → samples → lenses → viewer → rooms` after `stakes.js`, before `sound.js`.
 
-## What's new in 0.7: keep three
+## What’s new in 0.7.1: worlds
+Each of the 33 field-guide aesthetics is now its own small world built around what that scene actually did (see NOTES-0.7.md). The keep-three journey has staged scenes, objects, a box and mote narrating.
+
+## What’s new in 0.7: keep three
 A journey layer: explorable things in all 12 eras, five transitions where you keep three, four kinds of loss (gone, flattened, gated, displaced), a record when you go back, "what it noticed", the vanishing "why" in 2024, a suggested rewrite in 2024 and a question in 2030. All wording is in `js/content/eras.js`. See NOTES-0.7.md.
