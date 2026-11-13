@@ -314,3 +314,4 @@ body.era-2024 .ts-why::before { content: 'why: not shown'; font-size: 11px; colo
 /* 1991 is a full page over the desktop: the journey's own pieces sit above it there */
 body.era-1991 #win-things { z-index: 3100 !important; }
 body.era-1991 #jyBtn, body.era-1991 #jyPocket, body.era-1991 #jyToast { z-index: 3090; }
+.jy-thumb { display: block; max-width: 160px; border: 1px solid #999; margin: 4px 0; image-rendering: pixelated; }

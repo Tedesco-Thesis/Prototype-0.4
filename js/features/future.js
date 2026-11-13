@@ -69,7 +69,7 @@
   function build() {
     if ($('#win-after')) return;
     const w = document.createElement('div'); w.className = 'window'; w.id = 'win-after'; w.setAttribute('role', 'dialog'); w.setAttribute('aria-labelledby', 'fuTitle');
-    w.style.cssText = 'width:600px; top:170px; left:320px; z-index:13;';
+    w.style.cssText = 'width:680px; top:178px; left:300px; z-index:13;';
     w.innerHTML = '<div class="titlebar" onpointerdown="startDrag(event,\'win-after\')"><span class="ttl" id="fuTitle">after AI</span><div class="winbtns"><button onclick="minimizeWindow(\'win-after\')" aria-label="minimize">_</button><button onclick="closeWindow(\'win-after\')" aria-label="close">×</button></div></div><div class="winbody fu-body" id="fuMain"></div>';
     document.body.appendChild(w);
     if (typeof windowTitles !== 'undefined') windowTitles['win-after'] = 'after AI';
@@ -100,7 +100,9 @@
   /* ================= STEP 1 · after AI ================= */
   function drawAI() {
     const I = inputs(), d = dial(), f = F();
-    let h = '<p class="fu-lead">' + COPY.aiLead + '</p>';
+    const tiles = f.other ? [['📰', 'the ranked feed'], ['✍️', 'an AI summary'], ['🔘', 'the like button']] : I.carried.map((t) => [Journey.obj(t), t.title]);
+    while (tiles.length < 3) tiles.push(['·', '']);
+    let h = '<div class="fu-hero ai' + (f.other ? ' other' : '') + '" data-th="' + (f.other ? 'none' : I.top || 'none') + '" aria-hidden="true"><span class="fu-orb"></span><div class="fu-mini"><b>' + (f.other ? 'assembled for a stranger' : 'assembled for ' + esc(name())) + '</b><div class="fu-tiles">' + tiles.slice(0, 3).map((t, i) => '<span style="--i:' + i + '"><i>' + t[0] + '</i>' + esc(t[1]) + '</span>').join('') + '</div><em>generated in 0.4s \u00b7 one of one</em></div><span class="fu-spark s1">✦</span><span class="fu-spark s2">✦</span><span class="fu-spark s3">✧</span></div><p class="fu-lead">' + COPY.aiLead + '</p>';
     // 1. generated for you
     const must = I.carried.length ? I.carried.map((t) => '<span class="fu-chip">' + Journey.obj(t) + ' ' + esc(t.title) + '</span>').join('') : '<span class="fu-chip dim">nothing carried</span>';
     h += sec('gen', 'this computer was assembled for ' + esc(name()),
@@ -115,7 +117,7 @@
     // 3. errands
     h += sec('errands', 'send it back for you', '<p>' + COPY.errandsLead + '</p>' + COPY.places.map((p) => {
       const r = f.errands[p.id];
-      return '<div class="fu-errand"><span class="fu-ic">' + p.icon + '</span><div><b>' + p.where + '</b>' + (r ? '<p class="fu-res">' + esc((r === 'me' ? p.asMe : p.asAgent).replace('%N', name())) + '</p><small>saved you about ' + p.saved + ' minutes. ' + (r === 'me' ? 'they can’t tell it wasn’t you.' : 'they know what they were talking to.') + ' <a href="#" data-a="undo" data-id="' + p.id + '">undo</a></small>' : '<div class="fu-choose"><button type="button" class="fu-btn" data-a="go" data-id="' + p.id + '" data-as="me">go as me</button><button type="button" class="fu-btn" data-a="go" data-id="' + p.id + '" data-as="agent">say it’s my agent</button></div>') + '</div></div>';
+      return '<div class="fu-errand' + (r ? ' went as-' + r : '') + '"><div class="fu-track" aria-hidden="true"><span class="fu-you">you</span><i></i><span class="fu-dot">✦</span><span class="fu-place">' + p.icon + '</span>' + (r ? '<span class="fu-stamp">' + (r === 'me' ? 'as you' : 'as agent') + '</span>' : '') + '</div><div><b>' + p.where + '</b>' + (r ? '<p class="fu-res">' + esc((r === 'me' ? p.asMe : p.asAgent).replace('%N', name())) + '</p><small>saved you about ' + p.saved + ' minutes. ' + (r === 'me' ? 'they can’t tell it wasn’t you.' : 'they know what they were talking to.') + ' <a href="#" data-a="undo" data-id="' + p.id + '">undo</a></small>' : '<div class="fu-choose"><button type="button" class="fu-btn" data-a="go" data-id="' + p.id + '" data-as="me">go as me</button><button type="button" class="fu-btn" data-a="go" data-id="' + p.id + '" data-as="agent">say it’s my agent</button></div>') + '</div></div>';
     }).join(''));
     // 4. provenance
     const rows = I.mine.map((t) => {
@@ -157,12 +159,13 @@
   }
   function drawPQ() {
     const f = F(), H = harvested(), kept = Journey.carrying().map((id) => Journey.byId(id)).filter(Boolean)[0];
-    let h = '<p class="fu-lead">' + COPY.pqLead + '</p>';
+    const nSealed = H.filter((x) => f.sealed[x.id]).length;
+    let h = '<div class="fu-hero pq' + (nSealed === H.length ? ' safe' : '') + '" aria-hidden="true"><div class="fu-lattice"></div><div class="fu-locks">' + [0, 1, 2, 3, 4].map((i) => '<span style="--i:' + i + '"><i class="shut">🔒</i><i class="open">🔓</i></span>').join('') + '</div><em>' + (nSealed === H.length ? 'everything of yours is under a new lock' : 'the day the old locks opened') + '</em></div><p class="fu-lead">' + COPY.pqLead + '</p>';
     h += sec('harvest', 'opened today', '<p>' + COPY.harvestLead + '</p><ul class="fu-env">' + H.map((x, i) => '<li class="' + (f.sealed[x.id] ? 'sealed' : 'open') + '" style="--i:' + i + '"><span class="fu-lock">' + (f.sealed[x.id] ? '🔒' : '🔓') + '</span><span>' + esc(x.what) + '</span>' + (f.sealed[x.id] ? '<small>re-sealed with a new lock</small>' : '<button type="button" class="fu-btn" data-a="seal" data-id="' + x.id + '">re-seal</button>') + '</li>').join('') + '</ul><p class="fu-two"><b>gain:</b> the new locks hold against the new machines. <b>asks:</b> ' + COPY.sealNote + '</p>');
     h += sec('note', 'a note that can’t be copied', '<p>' + COPY.noteLead + '</p>' +
       '<div class="fu-q"><b>from mote, for you</b>' + (f.moteRead ? '<p class="fu-gone">read once. it is gone now. that was the point.</p>' : '<button type="button" class="fu-qenv" data-a="read">✉️ <span>open it (once)</span></button> <button type="button" class="fu-btn" data-a="copy">copy it first</button>') + '<div id="fuQ" aria-live="polite"></div></div>' +
       '<label class="fu-write">leave one for the next person at this computer<input id="fuNote" maxlength="80" value="' + esc(f.note || '') + '" placeholder="they can read it exactly once"></label><button type="button" class="fu-btn" data-a="leave">send it</button>' + (f.note && !f.noteRead ? ' <button type="button" class="fu-btn" data-a="readmine">be the next person</button>' : '') + (f.noteRead ? '<p class="fu-gone">your note was read. nobody can read it again, including you.</p>' : ''));
-    h += sec('cat', 'the cat came back', '<p>' + COPY.catLead + '</p><div class="fu-cats"><button type="button" class="fu-cat" data-a="cat" aria-label="look at the first cat">' + catFace(f.cat) + '</button><i aria-hidden="true">~ ~ ~ ~ ~ ~ ~</i><button type="button" class="fu-cat" data-a="cat" aria-label="look at the second cat">' + catFace(f.cat) + '</button></div><button type="button" class="fu-btn" data-a="uncat">look away</button>');
+    h += sec('cat', 'the cat came back', '<p>' + COPY.catLead + '</p><div class="fu-cats' + (f.cat ? ' set' : '') + '"><button type="button" class="fu-cat" data-a="cat" aria-label="look at the first cat">' + catFace(f.cat) + '</button><svg aria-hidden="true" viewBox="0 0 200 30" preserveAspectRatio="none"><path d="M0 15 Q 12.5 0 25 15 T 50 15 T 75 15 T 100 15 T 125 15 T 150 15 T 175 15 T 200 15"/><path class="p2" d="M0 15 Q 12.5 30 25 15 T 50 15 T 75 15 T 100 15 T 125 15 T 150 15 T 175 15 T 200 15"/></svg><button type="button" class="fu-cat" data-a="cat" aria-label="look at the second cat">' + catFace(f.cat) + '</button></div><button type="button" class="fu-btn" data-a="uncat">look away</button>');
     h += sec('home', 'what comes home', '<p>Everything that was yours comes back whole, signed and dated.' + (kept ? ' You carried <b>' + esc(kept.title) + '</b> to the end.' : '') + '</p><button type="button" class="fu-btn go" data-a="home">take it home</button>');
     return h;
   }

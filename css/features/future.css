@@ -88,3 +88,76 @@ body.pq #desktop { filter: hue-rotate(200deg) brightness(.75); transition: filte
 html body #win-after button.fu-eggw { all: unset; color: #e4e0ee; cursor: pointer; font: inherit; }
 html body #win-after button.fu-eggw:hover, html body #win-after button.fu-eggw:focus-visible { color: #6a5acd; outline: 1px dotted #6a5acd; }
 #jyToast { bottom: 152px; }
+
+/* ===== 0.9 — the two steps, made visual ===== */
+html body #win-after { width: min(680px, 94vw) !important; }
+html body #win-after .fu-btn { font: 13px system-ui, sans-serif; text-transform: none; letter-spacing: 0; }
+/* step 1: soft aurora, glass, things assembling themselves */
+html body #win-after .fu-body.fu-ai { background: radial-gradient(circle at 10% 0%, #ece4ff, transparent 45%), radial-gradient(circle at 95% 10%, #ffe6dc, transparent 45%), radial-gradient(circle at 50% 100%, #dff5ee, transparent 50%), #fbfaf7; }
+.fu-ai .fu-sec { background: rgba(255,255,255,.72); backdrop-filter: blur(8px); border-color: rgba(255,255,255,.9); box-shadow: 0 8px 30px rgba(90,70,170,.10); border-radius: 20px; }
+.fu-hero { position: relative; height: 190px; margin: -14px -16px 14px; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+.fu-hero em { position: absolute; left: 0; right: 0; bottom: 8px; text-align: center; font: 11px/1 'Courier New', monospace; letter-spacing: .14em; text-transform: uppercase; font-style: normal; opacity: .75; }
+.fu-hero.ai { background: linear-gradient(120deg, #cbb8ff, #ffc9b5, #b8f0df, #cbb8ff); background-size: 300% 300%; animation: fuAur 14s ease-in-out infinite; }
+@keyframes fuAur { 50% { background-position: 100% 50%; } }
+.fu-orb { position: absolute; left: 9%; top: 50%; width: 92px; height: 92px; margin-top: -46px; border-radius: 50%; background: conic-gradient(from 0deg, #fff, #b7a6ff, #ffd0c0, #a8f0dc, #fff); filter: blur(1px); box-shadow: 0 0 40px rgba(255,255,255,.9), inset 0 0 22px rgba(255,255,255,.9); animation: fuOrb 9s linear infinite, fuBreath 4s ease-in-out infinite; }
+@keyframes fuOrb { to { rotate: 360deg; } } @keyframes fuBreath { 50% { scale: 1.08; } }
+.fu-mini { position: relative; width: 58%; margin-left: 22%; background: rgba(255,255,255,.82); backdrop-filter: blur(10px); border-radius: 16px; padding: 10px 12px 26px; box-shadow: 0 14px 40px rgba(60,40,140,.22); }
+.fu-mini b { display: block; font: 600 13px system-ui, sans-serif; margin-bottom: 8px; color: #2c2357; }
+.fu-mini em { position: absolute; left: 12px; right: auto; bottom: 8px; color: #6a5acd; font-size: 9.5px; }
+.fu-tiles { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 6px; }
+.fu-tiles span { display: flex; flex-direction: column; gap: 2px; min-height: 58px; padding: 7px; border-radius: 10px; font: 11px/1.2 system-ui, sans-serif; color: #2c2357; background: #efeaff; animation: fuAsm .7s cubic-bezier(.2,1.4,.4,1) both; animation-delay: calc(.25s + var(--i) * .22s); overflow: hidden; }
+.fu-tiles span i { font-style: normal; font-size: 20px; }
+.fu-hero[data-th="making"] .fu-tiles span { background: #ffe9dc; } .fu-hero[data-th="belonging"] .fu-tiles span { background: #dff5ee; } .fu-hero[data-th="voice"] .fu-tiles span { background: #fff3c4; } .fu-hero[data-th="keeping"] .fu-tiles span { background: #e3ecff; } .fu-hero[data-th="play"] .fu-tiles span { background: #ffe0f0; }
+.fu-hero[data-th="belonging"] .fu-tiles { grid-template-columns: 1fr 1fr 1fr; } .fu-hero[data-th="voice"] .fu-tiles { grid-template-columns: 1fr; } .fu-hero[data-th="voice"] .fu-tiles span { min-height: 0; flex-direction: row; align-items: center; gap: 8px; } .fu-hero[data-th="voice"] { height: 230px; }
+.fu-hero.other { filter: grayscale(1) contrast(.95); }
+@keyframes fuAsm { from { opacity: 0; transform: translateY(26px) scale(.7) rotate(-6deg); filter: blur(4px); } }
+.fu-spark { position: absolute; color: #fff; text-shadow: 0 0 8px #fff; animation: fuTw 3s ease-in-out infinite; } .fu-spark.s1 { right: 8%; top: 16%; font-size: 22px; } .fu-spark.s2 { right: 16%; bottom: 20%; font-size: 14px; animation-delay: 1s; } .fu-spark.s3 { left: 30%; top: 10%; animation-delay: 2s; }
+@keyframes fuTw { 50% { opacity: .2; scale: .6; rotate: 90deg; } }
+/* the dial as a big segmented control */
+.fu-dial-l { gap: 4px; } .fu-dial-l span { padding: 6px 2px; border-radius: 10px; background: rgba(255,255,255,.6); border: 1px solid #e6e2f0; transition: all .25s; } .fu-dial-l span.on { background: #3b2d7a; color: #fff; transform: translateY(-2px); box-shadow: 0 6px 14px rgba(59,45,122,.3); }
+/* errands: a small trip there and back */
+.fu-errand { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: center; }
+.fu-track { position: relative; height: 44px; }
+.fu-track i { position: absolute; left: 30px; right: 30px; top: 21px; border-top: 2px dotted #b7a6ff; }
+.fu-you { position: absolute; left: 0; top: 12px; font: 600 10px system-ui, sans-serif; background: #3b2d7a; color: #fff; border-radius: 999px; padding: 3px 6px; }
+.fu-place { position: absolute; right: 0; top: 6px; font-size: 24px; }
+.fu-dot { position: absolute; left: 30px; top: 11px; color: #7a6bd6; font-size: 18px; text-shadow: 0 0 8px #b7a6ff; }
+.fu-errand.went .fu-dot { animation: fuTrip 2.2s ease-in-out both; }
+@keyframes fuTrip { 0% { left: 30px; } 45% { left: calc(100% - 52px); scale: 1.3; } 55% { left: calc(100% - 52px); } 100% { left: 30px; } }
+.fu-stamp { position: absolute; right: -4px; top: -4px; font: 700 9px/1 'Courier New', monospace; text-transform: uppercase; letter-spacing: .08em; padding: 3px 5px; border: 2px double; border-radius: 3px; background: rgba(255,255,255,.9); rotate: 8deg; animation: fuStamp .3s 1s cubic-bezier(.2,1.8,.5,1) both; }
+.as-me .fu-stamp { color: #9a1b1b; } .as-agent .fu-stamp { color: #1d6b3a; }
+@keyframes fuStamp { from { scale: 2.4; opacity: 0; } }
+/* provenance: an actual chain */
+.fu-chain { gap: 0; } .fu-chain .fu-link { border-radius: 999px; border-width: 2px; padding: 3px 12px; margin-right: 14px; }
+.fu-chain .fu-link:not(:last-child)::after { content: ''; position: absolute; right: -16px; top: 50%; width: 14px; border-top: 2px solid currentColor; }
+.fu-chain .fu-link.broken { rotate: -5deg; translate: 0 5px; } .fu-chain .fu-link.broken::after { border-top-style: dotted; width: 8px; right: -12px; rotate: 30deg; }
+.fu-chain .fu-link.signed { background: #1d6b3a; color: #fff; border-color: #1d6b3a; padding-left: 26px; } .fu-chain .fu-link.signed::before { content: '✒'; position: absolute; left: 8px; }
+
+/* step 2: deep, crystalline, a little strange */
+html body #win-after .fu-body.fu-pq { background: radial-gradient(circle at 15% 0%, #16305a, transparent 50%), radial-gradient(circle at 90% 20%, #45206a, transparent 50%), radial-gradient(circle at 50% 110%, #0f4a52, transparent 50%), #070a16; }
+.fu-pq .fu-sec { border-radius: 4px 20px 4px 20px; border-color: rgba(139,233,253,.3); box-shadow: inset 0 0 30px rgba(139,233,253,.05), 0 0 0 1px rgba(214,162,255,.08); }
+.fu-hero.pq { background: #05070f; height: 200px; }
+.fu-hero.pq em { color: #8be9fd; }
+.fu-lattice { position: absolute; inset: -40px; background-image: radial-gradient(circle, rgba(139,233,253,.7) 1.2px, transparent 1.6px), linear-gradient(60deg, rgba(214,162,255,.16) 1px, transparent 1px), linear-gradient(-60deg, rgba(139,233,253,.16) 1px, transparent 1px); background-size: 28px 24px, 28px 48px, 28px 48px; animation: fuLat 16s linear infinite; mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%); }
+@keyframes fuLat { to { transform: translate(28px, 48px); } }
+.fu-locks { position: relative; display: flex; gap: 20px; }
+.fu-locks span { position: relative; width: 44px; height: 52px; font-size: 38px; line-height: 52px; text-align: center; animation: fuShake .5s ease-in-out both; animation-delay: calc(.5s + var(--i) * .45s); }
+.fu-locks i { position: absolute; inset: 0; font-style: normal; } 
+.fu-locks .shut { animation: fuOut .01s linear both; animation-delay: calc(.95s + var(--i) * .45s); }
+.fu-locks .open { opacity: 0; filter: drop-shadow(0 0 10px #ff7a90); animation: fuIn .3s ease-out both; animation-delay: calc(.95s + var(--i) * .45s); }
+@keyframes fuShake { 20% { rotate: -14deg; } 50% { rotate: 12deg; } 80% { rotate: -6deg; } } @keyframes fuOut { to { opacity: 0; } } @keyframes fuIn { from { opacity: 0; scale: 1.6; } to { opacity: 1; } }
+.fu-hero.pq.safe .shut { animation: none; opacity: 1; filter: drop-shadow(0 0 12px #8be9fd); } .fu-hero.pq.safe .open { animation: none; opacity: 0; } .fu-hero.pq.safe .fu-locks span { animation: none; }
+.fu-env li.sealed { background: linear-gradient(90deg, rgba(139,233,253,.10), transparent); background-image: linear-gradient(90deg, rgba(139,233,253,.12), transparent), radial-gradient(circle, rgba(139,233,253,.5) 1px, transparent 1.4px); background-size: auto, 14px 12px; animation: fuSeal .7s ease-out; }
+@keyframes fuSeal { from { box-shadow: 0 0 0 0 rgba(139,233,253,.9); } to { box-shadow: 0 0 0 16px rgba(139,233,253,0); } }
+.fu-env li.open span:nth-child(2) { text-shadow: 0 0 12px rgba(255,122,144,.35); }
+html body #win-after .fu-qenv { font: 15px system-ui, sans-serif; padding: 14px 22px; border-radius: 4px 18px 4px 18px; box-shadow: 0 0 24px rgba(214,162,255,.5); }
+.fu-cats svg { flex: 1; height: 30px; min-width: 40px; } .fu-cats path { fill: none; stroke: #d6a2ff; stroke-width: 1.5; stroke-dasharray: 6 5; animation: fuDash 1.2s linear infinite; } .fu-cats path.p2 { stroke: #8be9fd; animation-direction: reverse; }
+@keyframes fuDash { to { stroke-dashoffset: -22; } }
+.fu-cats.set path { stroke-dasharray: none; animation: none; filter: drop-shadow(0 0 4px #8be9fd); } .fu-cats.set .fu-cat { border-color: #8be9fd; box-shadow: 0 0 18px rgba(139,233,253,.5); }
+html body #win-after .fu-cat { font: 20px/1 'Courier New', monospace; padding: 14px 16px; background: rgba(255,255,255,.04); color: #e8eaff; border: 1px solid rgba(160,180,255,.4); border-radius: 12px; }
+body.pq #desktop::after { content: ''; position: fixed; inset: 0; pointer-events: none; background-image: radial-gradient(circle, rgba(139,233,253,.35) 1px, transparent 1.5px); background-size: 34px 30px; mix-blend-mode: screen; animation: fuLat 30s linear infinite; }
+@media (max-width: 700px) { .fu-errand { grid-template-columns: 1fr; } .fu-mini { width: 66%; margin-left: 28%; } .fu-orb { width: 60px; height: 60px; margin-top: -30px; left: 5%; } .fu-locks { gap: 8px; } }
+@media (prefers-reduced-motion: reduce) { .fu-hero.ai, .fu-orb, .fu-tiles span, .fu-spark, .fu-errand.went .fu-dot, .fu-stamp, .fu-lattice, .fu-cats path, body.pq #desktop::after { animation: none !important; } .fu-locks span, .fu-locks .shut { animation: none; } .fu-locks .shut { opacity: 0; } .fu-locks .open { animation: none; opacity: 1; } }
+html body #win-after .fu-pq button.fu-qenv { color: #0c0f1c; background: linear-gradient(120deg, #8be9fd, #d6a2ff, #ffb3c7, #8be9fd); background-size: 300% 100%; border: 0; animation: fuShim 4s linear infinite; }
+html body #win-after .fu-pq .fu-btn { background: rgba(139,233,253,.08); color: #e8eaff; border: 1px solid #8be9fd; }
+html body #win-after .fu-pq .fu-btn.go { background: linear-gradient(90deg, #8be9fd, #d6a2ff); color: #0c0f1c; border: 0; }

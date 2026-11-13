@@ -45,7 +45,7 @@
   const ALL = [];
   Object.keys(C.THINGS).forEach((ek) => C.THINGS[ek].forEach((t) => ALL.push(Object.assign({ era: ek }, t))));
   // yours: answers you wrote and things you made in the aesthetic windows. they are things too, so they can be carried or lost.
-  const mineThings = () => (J.mine || []).map((m) => ({ id: m.id, era: m.era, mine: true, kind: m.kind, theme: m.kind === 'memory' ? 'voice' : 'making', title: m.title, line: m.line, ctx: m.ctx, flat: m.flat, t: m.t }));
+  const mineThings = () => (J.mine || []).map((m) => ({ id: m.id, era: m.era, mine: true, kind: m.kind, theme: m.kind === 'memory' ? 'voice' : 'making', title: m.title, line: m.line, ctx: m.ctx, flat: m.flat, t: m.t, img: m.img }));
   const every = () => ALL.concat(mineThings());
   const byId = (id) => every().find((t) => t.id === id);
   const fateOf = (id) => (J.lost[id] ? J.lost[id].fate : 'here');
@@ -245,7 +245,7 @@
     h += '<ul class="jy-yours-list">' + mine.map((t) => {
       const f = home ? 'here' : fateOf(t.id);
       const body = f === 'here' ? '\u201c' + esc(t.line) + '\u201d' : f === 'displaced' ? esc(systemVersion(t)) : f === 'degraded' ? esc(t.line.split(' ').slice(0, 4).join(' ')) + '\u2026' : f === 'gated' ? 'behind a gate.' : 'only a record that it existed.';
-      return '<li>' + objHTML(t, 'mini' + (f !== 'here' ? ' f-' + f : '')) + '<div><b>' + esc(t.title) + '</b> ' + (f !== 'here' ? '<span class="jy-b f-' + f + '">' + esc(C.FATES[f].label) + '</span>' : (home && fateOf(t.id) !== 'here' ? '<span class="jy-b ok">returned</span>' : '')) + '<p>' + body + '</p>' +
+      return '<li>' + objHTML(t, 'mini' + (f !== 'here' ? ' f-' + f : '')) + '<div><b>' + esc(t.title) + '</b> ' + (f !== 'here' ? '<span class="jy-b f-' + f + '">' + esc(C.FATES[f].label) + '</span>' : (home && fateOf(t.id) !== 'here' ? '<span class="jy-b ok">returned</span>' : '')) + (t.img && f === 'here' ? '<img class="jy-thumb" alt="your drawing" src="' + t.img + '">' : '') + '<p>' + body + '</p>' +
         (home ? '<small>\u2014 ' + esc(J.name || 'you') + ', ' + new Date(t.t).toLocaleDateString() + ' \u00b7 from ' + esc(eraOf(t.era).label) + '</small>' : '') + '</div></li>';
     }).join('') + '</ul>';
     const c = carrying(); if (c.length) h += '<p class="jy-help">and you are carrying: ' + c.map((id) => esc(byId(id).title)).join(', ') + '.</p>';
@@ -253,7 +253,7 @@
   }
   function keepsake() {
     const mine = mineThings(), name = J.name || 'a visitor';
-    const li = mine.map((t) => '<li><b>' + esc(t.title) + '</b><p>\u201c' + esc(t.line) + '\u201d</p><small>' + new Date(t.t).toLocaleDateString() + ' \u00b7 ' + esc(eraOf(t.era).label) + (fateOf(t.id) !== 'here' ? ' \u00b7 was ' + esc(C.FATES[fateOf(t.id)].label) + ' on the way, and came back' : '') + '</small></li>').join('');
+    const li = mine.map((t) => '<li><b>' + esc(t.title) + '</b>' + (t.img ? '<p><img alt="" style="max-width:240px;border:1px solid #999" src="' + t.img + '"></p>' : '') + '<p>\u201c' + esc(t.line) + '\u201d</p><small>' + new Date(t.t).toLocaleDateString() + ' \u00b7 ' + esc(eraOf(t.era).label) + (fateOf(t.id) !== 'here' ? ' \u00b7 was ' + esc(C.FATES[fateOf(t.id)].label) + ' on the way, and came back' : '') + '</small></li>').join('');
     const car = carrying().map((id) => esc(byId(id).title)).join(', ');
     return '<!doctype html><meta charset="utf-8"><title>third space \u00b7 ' + esc(name) + '</title><style>body{max-width:34rem;margin:3rem auto;padding:0 1rem;font:17px/1.5 Georgia,serif;color:#222;background:#fbf7ec}h1{font-size:1.5rem}li{margin:0 0 1.2rem;list-style:none;border-left:4px solid #cc0000;padding-left:.8rem}ul{padding:0}p{margin:.2rem 0}small{color:#666}</style>' +
       '<h1>what ' + esc(name) + ' brought home from the third space</h1><p>These are the things that were yours. Everything else in that computer was a sample.</p><ul>' + li + '</ul>' + (car ? '<p>Carried to the end: ' + car + '.</p>' : '') + '<p><small>Made in a browser. Nothing here was sent anywhere.</small></p>';
@@ -516,7 +516,7 @@
   /* ---------------- public ---------------- */
   window.Journey = {
     state: () => J, things: (k) => (C.THINGS[k] || []), fateOf, open: openThings, begin: () => { J.mode = 'on'; save(); }, free: () => { J.mode = 'free'; save(); },
-    reset, exportJSON, pool, made, answer, keepsake, mine: mineThings, save, carrying, byId, eraOf, obj: (t) => objOf(t)[1], runScene: (a) => { queue = [a]; scene = null; nextScene(); }, ALL,
+    reset, exportJSON, pool, made, answer, keepsake, keepMine: (o) => { addMine(Object.assign({ kind: 'made', era: curKey(), t: now(), flat: 'user-generated content \u00b7 image' }, o)); toast('you made that. it\u2019s yours now. i\u2019ll put it with your things.'); }, mine: mineThings, save, carrying, byId, eraOf, obj: (t) => objOf(t)[1], runScene: (a) => { queue = [a]; scene = null; nextScene(); }, ALL,
     banner(a) {
       const f = a.fate || 'here', t = byId(a.id); if (!t) return '';
       if (f === 'here') return '<p class="ts-foot">a thing from ' + esc(eraOf(t.era).label) + '. wording is a stand-in.</p>';
