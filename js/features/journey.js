@@ -516,7 +516,7 @@
   /* ---------------- public ---------------- */
   window.Journey = {
     state: () => J, things: (k) => (C.THINGS[k] || []), fateOf, open: openThings, begin: () => { J.mode = 'on'; save(); }, free: () => { J.mode = 'free'; save(); },
-    reset, exportJSON, pool, made, answer, keepsake, mine: mineThings, runScene: (a) => { queue = [a]; scene = null; nextScene(); }, ALL,
+    reset, exportJSON, pool, made, answer, keepsake, mine: mineThings, save, carrying, byId, eraOf, obj: (t) => objOf(t)[1], runScene: (a) => { queue = [a]; scene = null; nextScene(); }, ALL,
     banner(a) {
       const f = a.fate || 'here', t = byId(a.id); if (!t) return '';
       if (f === 'here') return '<p class="ts-foot">a thing from ' + esc(eraOf(t.era).label) + '. wording is a stand-in.</p>';

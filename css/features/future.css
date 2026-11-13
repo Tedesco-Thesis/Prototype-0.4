@@ -1,0 +1,90 @@
+/* future.css — the two speculative steps. after AI: calm, soft, generated. after the locks: dark, iridescent, a little strange. */
+#fuBtn { position: fixed; left: 10px; bottom: 116px; z-index: 40; font-size: 12px; box-shadow: 2px 2px 0 rgba(0,0,0,.35); }
+#fuBtn[hidden] { display: none; }
+html body #win-after { width: min(600px, 94vw) !important; }
+html body #win-after .fu-body { max-height: 72vh; overflow: auto; padding: 14px 16px; font: 14px/1.5 system-ui, -apple-system, 'Segoe UI', sans-serif; background: #fbfaf7; color: #23222b; }
+.fu-lead { font-size: 16px; margin: 0 0 12px; }
+.fu-sec { background: #fff; border: 1px solid #e6e2f0; border-radius: 14px; padding: 12px 14px; margin: 0 0 12px; box-shadow: 0 2px 10px rgba(80,60,160,.06); }
+.fu-sec h3 { margin: 0 0 6px; font-size: 15px; letter-spacing: -.01em; }
+.fu-sec p { margin: 0 0 8px; }
+.fu-two { font-size: 12.5px; background: #f6f3ff; border-radius: 8px; padding: 6px 9px; }
+.fu-two b { color: #4b3bb5; }
+.fu-btn { font: inherit; font-size: 13px; padding: 5px 12px; border-radius: 999px; border: 1px solid #b7a6ff; background: #fff; color: #3b2d7a; cursor: pointer; }
+.fu-btn:hover, .fu-btn:focus-visible { background: #efeaff; outline: 2px solid #b7a6ff; outline-offset: 1px; }
+.fu-btn.go { background: #3b2d7a; color: #fff; border-color: #3b2d7a; }
+.fu-chip { display: inline-block; margin: 2px 4px 2px 0; padding: 2px 9px; border-radius: 999px; background: #efeaff; font-size: 12.5px; }
+.fu-chip.dim { opacity: .55; }
+.fu-rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 6px 0 8px; }
+.fu-rules > div { border: 1px dashed #cfc6f2; border-radius: 10px; padding: 6px 8px; }
+.fu-rules b { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: .1em; color: #6a5acd; margin-bottom: 3px; }
+.fu-other { margin-top: 8px; padding: 8px 10px; border-radius: 10px; background: #f1f1f1; filter: grayscale(1); }
+.fu-other b { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; }
+#fuDial { width: 100%; accent-color: #6a5acd; }
+.fu-dial-l { display: grid; grid-template-columns: repeat(4, 1fr); font-size: 11px; text-align: center; color: #777; margin-bottom: 6px; }
+.fu-dial-l span.on { color: #3b2d7a; font-weight: 700; }
+.fu-write { display: block; font-size: 12.5px; margin: 8px 0 4px; }
+.fu-write textarea, .fu-write input { display: block; width: 100%; box-sizing: border-box; margin-top: 4px; font: inherit; padding: 7px 9px; border: 1px solid #cfc6f2; border-radius: 10px; background: #fff; color: inherit; }
+.fu-draft { min-height: 1em; font-size: 14px; }
+.fu-draft small, .fu-errand small, .fu-env small, .fu-q small { color: #666; font-size: 11.5px; }
+.fu-mine-w { font-family: 'Caveat', 'Comic Sans MS', cursive; font-size: 19px; }
+.fu-its-w { background: linear-gradient(90deg, #e9e3ff, #ffe7dc); border-bottom: 2px dotted #7a6bd6; }
+.fu-ask { font-family: 'Courier New', monospace; color: #8a1c1c; }
+.fu-errand { display: flex; gap: 10px; padding: 8px 0; border-top: 1px solid #eee; }
+.fu-ic { font-size: 22px; }
+.fu-choose { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.fu-res { margin: 2px 0; font-style: italic; }
+.fu-prov { list-style: none; padding: 0; margin: 0 0 8px; }
+.fu-prov li { padding: 8px 0; border-top: 1px solid #eee; }
+.fu-chain { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin: 4px 0; font-size: 12px; }
+.fu-link { padding: 2px 8px; border-radius: 4px; border: 1px solid; position: relative; }
+.fu-link.ok { color: #1d6b3a; background: #effaf1; }
+.fu-link.broken { color: #9a1b1b; background: #fdeeee; border-style: dashed; text-decoration: line-through; }
+.fu-link.open { color: #777; border-style: dotted; }
+.fu-link.signed { font-weight: 700; }
+.fu-empty { color: #666; font-style: italic; }
+.fu-eggw { background: none; border: 0; padding: 0; font: inherit; color: #ddd8ee; cursor: pointer; }
+.fu-eggw:hover, .fu-eggw:focus-visible { color: #6a5acd; outline: 1px dotted; }
+.fu-spec { font-size: 11px; color: #777; font-style: italic; }
+.fu-say { min-height: 1.2em; font-size: 12.5px; color: #1d6b3a; position: sticky; bottom: 0; background: inherit; }
+.fu-next { text-align: right; }
+#fuStage { margin-left: 4px; }
+
+/* ---- step 2: after the locks ---- */
+html body #win-after .fu-body.fu-pq { background: radial-gradient(circle at 15% 0%, #1b2a4a, transparent 55%), radial-gradient(circle at 90% 20%, #3a1b4a, transparent 50%), #0c0f1c; color: #e8eaff; }
+.fu-pq .fu-sec { background: rgba(255,255,255,.05); border-color: rgba(160,180,255,.25); box-shadow: none; backdrop-filter: blur(4px); }
+.fu-pq .fu-sec h3 { background: linear-gradient(90deg, #8be9fd, #d6a2ff, #ffb3c7); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.fu-pq .fu-two { background: rgba(140,160,255,.12); } .fu-pq .fu-two b { color: #8be9fd; }
+.fu-pq .fu-btn { background: transparent; color: #e8eaff; border-color: #8be9fd; }
+.fu-pq .fu-btn:hover, .fu-pq .fu-btn:focus-visible { background: rgba(139,233,253,.15); }
+.fu-pq .fu-btn.go { background: linear-gradient(90deg, #8be9fd, #d6a2ff); color: #0c0f1c; border: 0; }
+.fu-pq .fu-write input { background: rgba(255,255,255,.08); border-color: rgba(160,180,255,.4); }
+.fu-pq .fu-spec, .fu-pq small { color: #a9b0d6 !important; }
+.fu-pq .fu-say { color: #8be9fd; }
+.fu-env { list-style: none; padding: 0; margin: 0 0 8px; }
+.fu-env li { display: grid; grid-template-columns: 28px 1fr auto; gap: 8px; align-items: center; padding: 7px 0; border-top: 1px solid rgba(160,180,255,.18); }
+.fu-env li.open { animation: fuOpen .6s ease-out both; animation-delay: calc(var(--i) * .25s); }
+.fu-env li.open .fu-lock { filter: drop-shadow(0 0 6px #ff7a90); }
+.fu-env li.sealed .fu-lock { filter: drop-shadow(0 0 6px #8be9fd); }
+.fu-env small { grid-column: 2 / -1; }
+@keyframes fuOpen { from { opacity: 0; transform: translateX(-10px); } }
+.fu-q { border: 1px dashed rgba(214,162,255,.5); border-radius: 12px; padding: 10px; margin-bottom: 8px; }
+.fu-q > b { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: #d6a2ff; margin-bottom: 6px; }
+.fu-qenv { font: inherit; padding: 8px 14px; border-radius: 12px; border: 0; cursor: pointer; color: #0c0f1c; background: linear-gradient(120deg, #8be9fd, #d6a2ff, #ffb3c7, #8be9fd); background-size: 300% 100%; animation: fuShim 4s linear infinite; }
+@keyframes fuShim { to { background-position: -300% 0; } }
+.fu-qmsg { font: 20px/1.3 'Caveat', 'Comic Sans MS', cursive; margin: 8px 0 2px; animation: fuFade 9s ease-in forwards; }
+.fu-qmsg.scr { font: 16px/1.3 'Courier New', monospace; animation: none; color: #ff7a90; }
+@keyframes fuFade { 0%, 70% { opacity: 1; filter: none; } 100% { opacity: 0; filter: blur(6px); } }
+.fu-gone { font-style: italic; color: #a9b0d6; }
+.fu-cats { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 8px 0; }
+.fu-cats i { flex: 1; text-align: center; color: #d6a2ff; font-style: normal; letter-spacing: .3em; overflow: hidden; white-space: nowrap; animation: fuWave 2s ease-in-out infinite; }
+@keyframes fuWave { 50% { opacity: .3; } }
+.fu-cat { font: 16px/1 'Courier New', monospace; background: none; border: 1px solid rgba(160,180,255,.4); color: #e8eaff; padding: 10px 12px; border-radius: 10px; cursor: pointer; white-space: nowrap; }
+.fu-cat:hover, .fu-cat:focus-visible { border-color: #8be9fd; outline: none; box-shadow: 0 0 12px rgba(139,233,253,.4); }
+body.pq #desktop { filter: hue-rotate(200deg) brightness(.75); transition: filter 1.2s; }
+
+@media (max-width: 700px) { .fu-rules { grid-template-columns: 1fr; } .fu-dial-l { font-size: 9.5px; } #fuBtn { bottom: 112px; left: 6px; } .fu-env li { grid-template-columns: 24px 1fr; } .fu-env li .fu-btn { grid-column: 2; justify-self: start; } }
+@media (prefers-reduced-motion: reduce) { .fu-env li.open, .fu-qenv, .fu-cats i { animation: none; } .fu-qmsg { animation: none; } }
+/* the era skin restyles every button in a window; the hidden word must stay hidden */
+html body #win-after button.fu-eggw { all: unset; color: #e4e0ee; cursor: pointer; font: inherit; }
+html body #win-after button.fu-eggw:hover, html body #win-after button.fu-eggw:focus-visible { color: #6a5acd; outline: 1px dotted #6a5acd; }
+#jyToast { bottom: 152px; }
