@@ -35,3 +35,23 @@ Arrival is a CRT that boots, with mote and a sticky note of what is kept. Each t
 
 ### To check
 Field-note claims in the worlds (e.g. the backrooms' 2019 origin, art hoe's origins, seapunk's 2011 tag), and the invented names. The coquette notebook's ruled lines don't line up with its text yet.
+
+## 0.7.2 — personal, and a little whimsical (Nov 12)
+
+### One memory, one question (js/content/eras.js → MEMORIES)
+Every era's "things here" tab opens with one specific memory paraphrased from the interviews (placeholders, not quotes: check each with the speaker) and the same question for the visitor. An answer becomes one of the visitor's own things.
+
+### What you make is yours, and can be lost
+Things made in the aesthetic windows (acts named in `MAKES`) and answers to the questions join the keep-three pool, marked "yours". If one is left behind mote says so. Fates apply to them: a displaced answer shows only how a system filed it (`flat`).
+
+### The "yours" tab and 2030
+"yours" lists everything the visitor wrote or made, as it stands in the current era. In 2030 everything comes back whole, signed and dated, and can be opened as a keepsake page. "what it noticed" now shows the visitor's words next to how they were filed.
+
+### Hidden little things (js/features/whimsy.js)
+1991–2010 hide small pointless interactions: a cat, a cloud that rains, a hit counter, an under-construction digger, a sparkle star, a marquee, a poke, photo filters, typed words ("hello" in 1991, "mote"). From 2014 there are none; the same corner asks for a star rating, as current interfaces do. In 2030 the visitor can hide a note that turns up in 1996. Finds live in `thirdspace.whimsy.v1` and are erased with the journey.
+
+### Fixed
+In 1991 the journey button, things window and pocket were hidden under the full-page 1991 document. They now sit above it.
+
+### Tests
+`node tests/personal.js` (23 checks). Disclosure on the arrival sheet was extended to cover answers and made things.

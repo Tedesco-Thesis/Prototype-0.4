@@ -367,7 +367,7 @@
     return {
       c, esc, win, stage, handle: handle(),
       onClose: (fn) => { closers.push(fn); },
-      act: (name, w, detail) => api.act(name, w == null ? 1 : w, detail),
+      act: (name, w, detail) => { api.act(name, w == null ? 1 : w, detail); if (window.Journey && Journey.made) Journey.made(c, name, detail); },
       every: (ms, fn) => { const t = setInterval(() => { if (open()) fn(); }, ms); return () => clearInterval(t); },
       after: (ms, fn) => { const t = setTimeout(fn, ms); return () => clearTimeout(t); },
       audio,

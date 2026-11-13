@@ -30,7 +30,7 @@
   const now = () => new Date().toISOString();
 
   /* ---------------- state ---------------- */
-  const blank = () => ({ v: 1, mode: 'new', passed: {}, kept: {}, lost: {}, opened: {}, unlocked: {}, why: {}, hes: {}, delegated: {}, log: [], going: [], polish: { shown: 0, accepted: 0, refused: 0 }, asks: { shown: 0, answered: 0 }, revealSeen: false });
+  const blank = () => ({ v: 1, mode: 'new', passed: {}, kept: {}, lost: {}, opened: {}, unlocked: {}, why: {}, hes: {}, delegated: {}, log: [], going: [], polish: { shown: 0, accepted: 0, refused: 0 }, asks: { shown: 0, answered: 0 }, mine: [], name: '', revealSeen: false });
   let mem = null;
   function load() { try { const r = localStorage.getItem(KEY); return r ? Object.assign(blank(), JSON.parse(r)) : (mem || blank()); } catch (e) { return mem || blank(); } }
   let J = load();
@@ -44,12 +44,15 @@
   const curKey = () => { const m = /era-(\w+)/.exec(document.body.className); return m ? m[1] : '1991'; };
   const ALL = [];
   Object.keys(C.THINGS).forEach((ek) => C.THINGS[ek].forEach((t) => ALL.push(Object.assign({ era: ek }, t))));
-  const byId = (id) => ALL.find((t) => t.id === id);
+  // yours: answers you wrote and things you made in the aesthetic windows. they are things too, so they can be carried or lost.
+  const mineThings = () => (J.mine || []).map((m) => ({ id: m.id, era: m.era, mine: true, kind: m.kind, theme: m.kind === 'memory' ? 'voice' : 'making', title: m.title, line: m.line, ctx: m.ctx, flat: m.flat, t: m.t }));
+  const every = () => ALL.concat(mineThings());
+  const byId = (id) => every().find((t) => t.id === id);
   const fateOf = (id) => (J.lost[id] ? J.lost[id].fate : 'here');
   const yearOf = (k) => parseInt(k, 10);
   const opaque = (k) => yearOf(k || curKey()) >= C.CFG.opaqueFrom;
   const reasonOf = (id) => { const l = J.lost[id]; if (!l) return ''; return yearOf(l.scene) >= C.CFG.opaqueFrom || !l.reason ? '' : l.reason; };
-  const systemVersion = (t) => { const w = (t.line + ' ' + t.ctx).replace(/\s+/g, ' ').split(' ').slice(0, 11).join(' '); return w.replace(/[,.;:]$/, '') + '…'; };
+  const systemVersion = (t) => { if (t.mine) return t.flat ? 'filed as: ' + t.flat : 'filed.'; const w = (t.line + ' ' + t.ctx).replace(/\s+/g, ' ').split(' ').slice(0, 11).join(' '); return w.replace(/[,.;:]$/, '') + '…'; };
 
   function bodyFor(t) {
     const f = fateOf(t.id);
@@ -94,7 +97,7 @@
   function label() {
     const b = $('#jyBtn'); if (!b) return;
     const k = curKey(), n = (C.THINGS[k] || []).length;
-    b.textContent = '◆ things in ' + eraOf(k).label + (n ? ' (' + n + ')' : '');
+    b.textContent = '◆ things in ' + (k === '2030' ? 'the next web' : eraOf(k).label) + (n ? ' (' + n + ')' : '');
     b.hidden = !n;
     pocket();
   }
@@ -104,13 +107,14 @@
      mote narrates the transitions, and what you carry sits in a box with three slots. */
   const OBJ = {
     page: ['paper', '📄'], document: ['paper', '📜'], text: ['paper', '✍️'], directory: ['card', '📇'], list: ['card', '📋'],
+    memory: ['sticky', '✎'], made: ['polaroid', '★'],
     tool: ['floppy', '💾'], idea: ['sticky', '💡'], links: ['sticky', '🔗'], ad: ['banner', '📢'], form: ['card', '🧾'],
     feed: ['tape', '📰'], video: ['tape', '📼'], control: ['key', '🔘'], forum: ['card', '💬'], photo: ['polaroid', '📷'], record: ['folder', '🗂️'],
   };
   const objOf = (t) => OBJ[t.kind] || ['card', '◆'];
   function objHTML(t, extra) {
     const [shape, glyph] = objOf(t);
-    return '<span class="jy-obj o-' + shape + (extra ? ' ' + extra : '') + '" aria-hidden="true"><i>' + glyph + '</i><b>' + esc(t.title) + '</b><em>' + esc(eraOf(t.era).label) + '</em></span>';
+    return '<span class="jy-obj o-' + shape + (t.mine ? ' mine' : '') + (extra ? ' ' + extra : '') + '" aria-hidden="true"><i>' + glyph + '</i><b>' + esc(t.title) + '</b><em>' + esc(eraOf(t.era).label) + '</em></span>';
   }
   const MOTE = '<svg class="jy-mote-svg" viewBox="0 0 16 16" width="48" height="48" shape-rendering="crispEdges" aria-hidden="true">' +
     '<rect x="6" y="0" width="4" height="2" fill="#cc0000"/><rect x="7" y="2" width="2" height="2" fill="#1b1b3a"/>' +
@@ -162,7 +166,7 @@
 
   /* ---------------- the things window ---------------- */
   const ui = { tab: 'here', open: null, say: '' };
-  const TABS = [['here', 'things here'], ['left', 'what’s left'], ['people', 'people'], ['noticed', 'what it noticed'], ['log', 'log']];
+  const TABS = [['here', 'things here'], ['left', 'what’s left'], ['people', 'people'], ['yours', 'yours'], ['noticed', 'what it noticed'], ['log', 'log']];
   function openThings(tab, id) {
     build(); if (tab) ui.tab = tab; ui.open = id || null; draw();
     if (typeof openWindow === 'function') openWindow('win-things');
@@ -176,6 +180,7 @@
     else if (ui.tab === 'here') h = listHere();
     else if (ui.tab === 'left') h = listLeft();
     else if (ui.tab === 'people') h = listPeople();
+    else if (ui.tab === 'yours') h = yoursTab();
     else if (ui.tab === 'noticed') h = reveal();
     else h = logTab();
     m.innerHTML = h + '<div class="jy-say" role="status">' + esc(ui.say) + '</div>';
@@ -187,9 +192,71 @@
   function listHere() {
     const k = curKey(), er = eraOf(k), list = C.THINGS[k] || [];
     let h = '<p class="jy-era"><b>' + esc(er.label) + '</b> · ' + esc(er.name || '') + '</p><p class="jy-help">things you can pick up and read in this era. open one for what it was, and poke it. nothing here is counted unless it says so.</p>';
+    h += memCard(k);
     if (J.mode === 'free') h += '<p class="jy-help">you chose to look around without the journey, so nothing is lost. <a href="#" data-act="join">start it anyway</a></p>';
     h += list.length ? '<ul class="jy-list">' + list.map((t) => '<li><button class="jy-row" data-thing="' + t.id + '">' + objHTML(t, 'mini') + '<b>' + esc(t.title) + '</b> ' + badge(t.id) + (kept(t.id) && fateOf(t.id) === 'here' ? ' <span class="jy-b ok">carried</span>' : '') + '<span>' + esc(t.line) + '</span></button></li>').join('') + '</ul>' : '<p class="ts-empty">nothing is catalogued for this era.</p>';
+    const yours = mineThings().filter((t) => t.era === k);
+    if (yours.length) h += '<h4 class="jy-h">yours, from here</h4><ul class="jy-list">' + yours.map((t) => '<li><button class="jy-row" data-thing="' + t.id + '">' + objHTML(t, 'mini' + (fateOf(t.id) !== 'here' ? ' f-' + fateOf(t.id) : '')) + '<b>' + esc(t.title) + '</b> ' + badge(t.id) + '<span>' + esc(fateOf(t.id) === 'here' ? t.line : C.FATES[fateOf(t.id)].note) + '</span></button></li>').join('') + '</ul>';
     return h;
+  }
+  /* one specific memory from an interview, and the same question for the visitor */
+  function memCard(k) {
+    const M = C.MEMORIES && C.MEMORIES[k]; if (!M) return '';
+    const id = 'Y-mem-' + k, m = (J.mine || []).find((x) => x.id === id), f = m ? fateOf(id) : 'here';
+    let mineH;
+    if (m && f !== 'here') mineH = '<p class="jy-mem-ans lost">' + esc(C.FATES[f].label) + '</p><small>your answer was left behind going into ' + esc(eraOf(J.lost[id].scene).label) + '. <a href="#" data-thing="' + id + '">see what is left of it</a></small>';
+    else if (m && !ui.memEdit) mineH = '<p class="jy-mem-ans">' + esc(m.line) + '</p><button type="button" class="btn-95" data-act="mem-edit">change it</button> <small>this is one of your things now.</small>';
+    else mineH = '<textarea id="jyMem" class="field" maxlength="200" rows="2" placeholder="a sentence is enough">' + esc(m ? m.line : '') + '</textarea><button type="button" class="btn-95 jy-go" data-act="mem-save">keep my answer</button> <small>optional. it stays in this browser and becomes one of your things.</small>';
+    return '<section class="jy-mem"><div class="jy-mem-theirs"><span class="jy-mem-who">' + esc(M.who) + ' remembers</span><p>' + esc(M.memory) + '</p><small>paraphrased from an interview. a placeholder until they have checked it.</small></div>' +
+      '<div class="jy-mem-yours"><label for="jyMem"><b>and you?</b> ' + esc(M.ask) + '</label>' + mineH + '</div></section>';
+  }
+  function addMine(m) {
+    J.mine = J.mine || [];
+    const i = J.mine.findIndex((x) => x.id === m.id);
+    if (i >= 0) J.mine[i] = Object.assign(J.mine[i], m); else J.mine.push(m);
+    save(); pocket(); if ($('#jyMain')) draw();
+  }
+  function answer(k, text) {
+    const M = C.MEMORIES[k]; text = String(text || '').trim().slice(0, 200); if (!M || !text) return false;
+    if (J.lost['Y-mem-' + k]) return false;
+    addMine({ id: 'Y-mem-' + k, kind: 'memory', era: k, title: 'your answer: ' + M.label, line: text, ctx: 'you wrote this in ' + eraOf(k).label + ', when it asked: ' + M.ask, flat: M.flat, t: now() });
+    log('answered a question in ' + eraOf(k).label + ' (' + M.label + ')');
+    return true;
+  }
+  // called by the aesthetic windows whenever the visitor does something there (see subcultures.js kit.act)
+  function made(c, name, detail) {
+    if (!c || (C.MAKES || []).indexOf(name) < 0 || !detail) return;
+    let id = 'Y-made-' + c.id, n = 1; while (J.lost[id]) id = 'Y-made-' + c.id + '-' + (++n);
+    const fresh = !(J.mine || []).some((x) => x.id === id);
+    addMine({ id, kind: 'made', era: curKey(), title: 'made in ' + c.title, line: String(detail).slice(0, 160), ctx: 'you made this in the ' + c.title + ' window.', flat: 'user-generated content \u00b7 ' + (c.kind || 'aesthetic'), t: now() });
+    if (fresh) { log('made something in ' + c.title); toast('you made that. it\u2019s yours now. i\u2019ll put it with your things.'); }
+  }
+  function toast(msg) {
+    let t = $('#jyToast'); if (!t) { t = document.createElement('div'); t.id = 'jyToast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+    t.innerHTML = MOTE + '<p>' + esc(msg) + '</p>'; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 5200);
+  }
+  /* everything that is the visitor's own. in 2030 it comes back whole, signed and dated. */
+  function yoursTab() {
+    const mine = mineThings(), k = curKey(), home = k === '2030';
+    let h = '<p class="jy-help">what you answered and what you made. these are the only things in this computer that are really yours.</p>';
+    if (!mine.length) return h + '<p class="ts-empty">nothing yet. answer the question in any era, or make something in one of the aesthetic windows.</p>';
+    h += home ? '<div class="jy-home"><p><b>2030 hands it back.</b> whole, with your name and the day you made it, whatever happened to it on the way. this is the speculative part.</p><label>sign it <input class="field" id="jyName" maxlength="40" value="' + esc(J.name || '') + '" placeholder="your name, or leave it"></label></div>'
+      : '<p class="jy-help">this is how each one stands in ' + esc(eraOf(k).label) + '. keep going: 2030 gives them back.</p>';
+    h += '<ul class="jy-yours-list">' + mine.map((t) => {
+      const f = home ? 'here' : fateOf(t.id);
+      const body = f === 'here' ? '\u201c' + esc(t.line) + '\u201d' : f === 'displaced' ? esc(systemVersion(t)) : f === 'degraded' ? esc(t.line.split(' ').slice(0, 4).join(' ')) + '\u2026' : f === 'gated' ? 'behind a gate.' : 'only a record that it existed.';
+      return '<li>' + objHTML(t, 'mini' + (f !== 'here' ? ' f-' + f : '')) + '<div><b>' + esc(t.title) + '</b> ' + (f !== 'here' ? '<span class="jy-b f-' + f + '">' + esc(C.FATES[f].label) + '</span>' : (home && fateOf(t.id) !== 'here' ? '<span class="jy-b ok">returned</span>' : '')) + '<p>' + body + '</p>' +
+        (home ? '<small>\u2014 ' + esc(J.name || 'you') + ', ' + new Date(t.t).toLocaleDateString() + ' \u00b7 from ' + esc(eraOf(t.era).label) + '</small>' : '') + '</div></li>';
+    }).join('') + '</ul>';
+    const c = carrying(); if (c.length) h += '<p class="jy-help">and you are carrying: ' + c.map((id) => esc(byId(id).title)).join(', ') + '.</p>';
+    return h + (home ? '<p><button class="btn-95 jy-go" data-act="keepsake">open it as a page to keep</button></p>' : '');
+  }
+  function keepsake() {
+    const mine = mineThings(), name = J.name || 'a visitor';
+    const li = mine.map((t) => '<li><b>' + esc(t.title) + '</b><p>\u201c' + esc(t.line) + '\u201d</p><small>' + new Date(t.t).toLocaleDateString() + ' \u00b7 ' + esc(eraOf(t.era).label) + (fateOf(t.id) !== 'here' ? ' \u00b7 was ' + esc(C.FATES[fateOf(t.id)].label) + ' on the way, and came back' : '') + '</small></li>').join('');
+    const car = carrying().map((id) => esc(byId(id).title)).join(', ');
+    return '<!doctype html><meta charset="utf-8"><title>third space \u00b7 ' + esc(name) + '</title><style>body{max-width:34rem;margin:3rem auto;padding:0 1rem;font:17px/1.5 Georgia,serif;color:#222;background:#fbf7ec}h1{font-size:1.5rem}li{margin:0 0 1.2rem;list-style:none;border-left:4px solid #cc0000;padding-left:.8rem}ul{padding:0}p{margin:.2rem 0}small{color:#666}</style>' +
+      '<h1>what ' + esc(name) + ' brought home from the third space</h1><p>These are the things that were yours. Everything else in that computer was a sample.</p><ul>' + li + '</ul>' + (car ? '<p>Carried to the end: ' + car + '.</p>' : '') + '<p><small>Made in a browser. Nothing here was sent anywhere.</small></p>';
   }
   function listLeft() {
     const ids = Object.keys(J.lost);
@@ -208,18 +275,18 @@
     let h = '<button class="btn-95" data-act="close-detail">← back</button> <span class="jy-era"><b>' + esc(t.title) + '</b> · ' + esc(er.label) + ' ' + badge(t.id) + '</span>';
     if (f === 'gone') {
       h += '<article class="jy-card gone">' + objHTML(t, 'big f-gone') + '<p><b>this is a record, not the thing.</b></p><p>' + esc(t.title) + ' (' + esc(t.kind) + ', ' + esc(er.label) + ') was here.</p><p class="jy-help">reason: ' + (reasonOf(t.id) ? esc(reasonOf(t.id)) : '<i>not shown</i>') + '</p><p class="jy-help">' + esc(C.FATES.gone.note) + '</p></article>';
-      return h + (window.Viewer ? '<p><button class="btn-95" data-act="trace" data-id="' + t.id + '">open the record</button></p>' : '');
+      return h + (window.Viewer && !t.mine ? '<p><button class="btn-95" data-act="trace" data-id="' + t.id + '">open the record</button></p>' : '');
     }
     if (f === 'gated' && !J.unlocked[t.id]) return h + gate(t);
-    let ctx = t.ctx, line = t.line, poke = true;
-    if (f === 'degraded') { ctx = '[image and formatting removed]'; poke = false; }
-    if (f === 'displaced') { ctx = systemVersion(t); poke = false; }
+    let ctx = t.ctx, line = t.line, poke = !t.mine;
+    if (f === 'degraded') { ctx = '[image and formatting removed]'; poke = false; if (t.mine) line = t.line.split(' ').slice(0, 4).join(' ') + '\u2026'; }
+    if (f === 'displaced') { ctx = systemVersion(t); poke = false; if (t.mine) line = ''; }
     h += '<article class="jy-card' + (f !== 'here' ? ' ' + f : '') + '">' + objHTML(t, 'big' + (f !== 'here' ? ' f-' + f : '')) + '<p class="jy-line">' + esc(line) + '</p><p>' + esc(ctx) + '</p>' +
       (f === 'displaced' ? '<p class="jy-help"><b>the system’s version.</b> it replaced the original. ' + (curKey() === '2030' ? '<a href="#" data-act="orig" data-id="' + t.id + '">see what it said before</a>' : 'the original is not shown in this era.') + '</p>' : '') +
       (f === 'degraded' ? '<p class="jy-help">' + esc(C.FATES.degraded.note) + '</p>' : '') +
       (t.era === '2030' ? '<p class="jy-help">this is speculative. nothing like it exists yet.</p>' : '') + '</article>';
     if (poke) h += '<p><button class="btn-95" data-act="poke" data-id="' + t.id + '">' + esc(t.poke[0]) + '</button></p><div class="jy-poke" id="jyPoke"></div>';
-    h += '<p class="jy-help">wording is a stand-in. <a href="#" data-act="trace" data-id="' + t.id + '">open as a trace</a> to see it held three ways.</p>';
+    h += t.mine ? '<p class="jy-help">' + (t.kind === 'memory' ? 'you wrote this.' : 'you made this.') + ' it stays in this browser. see everything of yours under \u201cyours\u201d.</p>' : '<p class="jy-help">wording is a stand-in. <a href="#" data-act="trace" data-id="' + t.id + '">open as a trace</a> to see it held three ways.</p>';
     if (!J.opened[t.id]) { J.opened[t.id] = 1; log('opened “' + t.title + '” (' + er.label + ')'); }
     return h;
   }
@@ -249,7 +316,9 @@
     if (J.going.length) h += '<p class="jy-help">you went back ' + J.going.length + ' time' + (J.going.length === 1 ? '' : 's') + '. a system would call that “churn”. you may have been looking for something.</p>';
     if (J.polish.shown) h += '<p class="jy-help">in 2024 it suggested a rewrite ' + J.polish.shown + ' time' + (J.polish.shown === 1 ? '' : 's') + '. you accepted ' + J.polish.accepted + ' and kept your own ' + J.polish.refused + '.</p>';
     if (J.asks.shown) h += '<p class="jy-help">in 2030 it asked ' + J.asks.shown + ' question' + (J.asks.shown === 1 ? '' : 's') + ' and wrote nothing.</p>';
-    return h + '<p><button class="btn-95" data-act="export">export what it kept (JSON)</button></p></div>';
+    const mine = mineThings();
+    if (mine.length) h += '<h4>what you told it, and how it was filed</h4>' + mine.map((t) => '<section class="jy-prof"><div class="jy-help jy-yours">' + esc(t.line) + '</div><div class="jy-help">filed as: <b>' + esc(t.flat || 'unfiled') + '</b></div></section>').join('') + '<p class="jy-help">one of these is a sentence about a person, a room, a year. the other is a row in a table.</p>';
+    return h + '<p><button class="btn-95" data-act="export">export what it kept (JSON)</button> <button class="btn-95 jy-go" data-tab="yours">see what 2030 hands back \u2192</button></p></div>';
   }
   function logTab() {
     let h = '<p class="jy-help">everything the journey itself has recorded. it is local, you can read all of it, and you can erase it.</p>';
@@ -264,6 +333,9 @@
     const a = e.target.closest('[data-act]'); if (!a) return; e.preventDefault();
     const k = a.dataset.act;
     if (k === 'close-detail') { ui.open = null; draw(); }
+    else if (k === 'mem-save') { const v = ($('#jyMem') || {}).value; ui.memEdit = false; if (answer(curKey(), v)) { ui.say = 'kept. it is yours.'; sfx('drop'); } draw(); }
+    else if (k === 'mem-edit') { ui.memEdit = true; draw(); const ta = $('#jyMem'); if (ta) ta.focus(); }
+    else if (k === 'keepsake') { try { const u = URL.createObjectURL(new Blob([keepsake()], { type: 'text/html' })); window.open(u, '_blank'); } catch (e) { ui.say = 'could not open a page here.'; draw(); } log('opened the keepsake page'); }
     else if (k === 'poke') { const t = byId(a.dataset.id); $('#jyPoke').innerHTML = '<div class="jy-result">' + esc(t.poke[1]) + '</div>'; log('poked “' + t.title + '”'); }
     else if (k === 'unlock') { J.unlocked[a.dataset.id] = 1; log('agreed to a gate to open “' + byId(a.dataset.id).title + '”'); save(); ui.say = 'it let you in. it noted that you agreed (see the log).'; draw(); }
     else if (k === 'orig') { const t = byId(a.dataset.id); a.closest('p').innerHTML = '<b>before:</b> ' + esc(t.line + ' ' + t.ctx); }
@@ -272,7 +344,7 @@
     else if (k === 'reset') { reset(); ui.say = 'erased. the journey is back to the beginning.'; draw(); }
     else if (k === 'join') { J.mode = 'on'; save(); log('started the journey'); ui.say = 'started. the next transition will ask you to choose.'; draw(); }
   }
-  function onInput(e) { if (e.target.id === 'jyAgree') $('#jyUnlock').disabled = !e.target.checked; }
+  function onInput(e) { if (e.target.id === 'jyAgree') $('#jyUnlock').disabled = !e.target.checked; if (e.target.id === 'jyName') { J.name = e.target.value.slice(0, 40); save(); } }
 
   function exportJSON() {
     const out = JSON.stringify({ note: 'everything the journey recorded in this browser. nothing was sent anywhere.', journey: J }, null, 2);
@@ -304,14 +376,14 @@
   }
   function pool(anchor) {
     const ai = idx(anchor);
-    return ALL.filter((t) => idx(t.era) < ai && idx(t.era) >= 0 && fateOf(t.id) === 'here').sort((a, b) => idx(a.era) - idx(b.era));
+    return every().filter((t) => idx(t.era) < ai && idx(t.era) >= 0 && fateOf(t.id) === 'here').sort((a, b) => idx(a.era) - idx(b.era));
   }
   function runScene(anchor) {
     const S = C.SCENES[anchor], p = pool(anchor), need = Math.min(C.CFG.keep, p.length);
     const automatic = !C.CFG.perTransition && Object.keys(J.kept).length > 0;
     scene = { anchor, pool: p, need, picked: [], t0: Date.now(), auto: automatic };
     if (automatic) { const carried = p.filter(kept).map((t) => t.id); scene.picked = carried; return finish(true); }
-    const rows = p.map((t) => '<li><label class="jy-pick"><input type="checkbox" data-id="' + t.id + '"><span class="jy-pick-o">' + objHTML(t) + '</span><small>' + esc(t.line) + ' <i>' + esc(C.THEMES[t.theme]) + '</i></small></label></li>').join('');
+    const rows = p.map((t) => '<li><label class="jy-pick"><input type="checkbox" data-id="' + t.id + '"><span class="jy-pick-o">' + objHTML(t) + '</span><small>' + esc(t.line) + ' <i>' + (t.mine ? (t.kind === 'memory' ? 'you wrote this' : 'you made this') : esc(C.THEMES[t.theme])) + '</i></small></label></li>').join('');
     const slots = Array.from({ length: need }, () => '<span class="jy-slot"></span>').join('');
     showModal('<div class="jy-stage" aria-hidden="true">' + (STAGE[S.slug] || '') + '</div>' +
       '<p class="jy-kick">moving into ' + esc(eraOf(anchor).label) + ' · ' + esc(eraOf(anchor).name || '') + '</p><h2>' + esc(S.title) + '</h2>' +
@@ -360,7 +432,7 @@
     const keptRow = scene.picked.map((id) => '<li class="jy-kept">' + objHTML(byId(id)) + '<span class="jy-stamp s-kept">carried</span></li>').join('');
     const rows = lost.map((t) => { const f = J.lost[t.id].fate; return '<li class="jy-fate" data-f="' + f + '">' + objHTML(t) + '<span class="jy-stamp s-' + f + '">' + esc(C.FATES[f].label) + '</span><small>' + esc(C.FATES[f].note) + ' ' + (opaqueNow ? '<i>no reason is shown.</i>' : 'reason: ' + esc(S.reason) + '.') + '</small></li>'; }).join('');
     showModal('<p class="jy-kick">into ' + esc(eraOf(scene.anchor).label) + '</p><h2>what happened to the rest</h2>' +
-      moteHTML([S.mote ? S.mote[1] : S.why], 'after') +
+      moteHTML([S.mote ? S.mote[1] : S.why].concat(lost.some((t) => t.mine) ? ['and one of those was yours. i\u2019m sorry.'] : []), 'after') +
       '<ul class="jy-aftr">' + keptRow + rows + '</ul>' + (lost.length ? '' : '<p>nothing was left behind this time.</p>') +
       '<p class="jy-help"><b>what this is about.</b> ' + esc(S.why) + '</p><p class="jy-help">you can find what was left behind under “what’s left”. it will be a record, not the thing.</p><p class="jy-btns"><button class="btn-95 jy-go" data-a="next">continue</button></p>', 'after th-' + S.slug);
     typeMote(modal());
@@ -444,7 +516,7 @@
   /* ---------------- public ---------------- */
   window.Journey = {
     state: () => J, things: (k) => (C.THINGS[k] || []), fateOf, open: openThings, begin: () => { J.mode = 'on'; save(); }, free: () => { J.mode = 'free'; save(); },
-    reset, exportJSON, pool, runScene: (a) => { queue = [a]; scene = null; nextScene(); }, ALL,
+    reset, exportJSON, pool, made, answer, keepsake, mine: mineThings, runScene: (a) => { queue = [a]; scene = null; nextScene(); }, ALL,
     banner(a) {
       const f = a.fate || 'here', t = byId(a.id); if (!t) return '';
       if (f === 'here') return '<p class="ts-foot">a thing from ' + esc(eraOf(t.era).label) + '. wording is a stand-in.</p>';

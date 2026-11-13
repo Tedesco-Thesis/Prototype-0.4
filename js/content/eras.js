@@ -35,6 +35,7 @@
     ],
     notes: [
       'What it keeps, shown to you at the end: the three things you choose each time, how long you took to choose, and a line you may write about why.',
+      'Also anything you write when it asks you a question, and what you make in the aesthetic windows. Those become yours, and can be lost like everything else.',
       'It stays in this browser. Nothing is sent anywhere, and there is no account.',
       'The systems in this prototype are simulations of how platforms behave, and they say so. The people and wording are placeholders.',
       'You can look around without the journey, read what it kept at any time, export it, or erase it.',
@@ -297,6 +298,41 @@
       line: 'placeholder: keeps a list of places they’ve left, and why.', links: ['T-1993-hotlist', 'T-2014-cookie', 'T-2016-story'] },
   ];
 
+
+  /* ---------------- one memory per era, and one question for the visitor ----------------
+     "The more local something is, the more universal." Each era shows ONE specific memory and asks the
+     visitor for theirs. memory: paraphrased from the two interviews (NOT quotes; check each with the speaker,
+     get consent, then replace with their own words). ask: the question. label: its short name.
+     flat: how a system would file the visitor's answer (shown when the answer is "displaced", and in the file). */
+  const MEMORIES = {
+    '1991': { label: 'the first computer', who: 'someone who was there', memory: 'The network was something you reached through a university or an office. You needed access, some technical nerve, and time to experiment.',
+      ask: 'Where was the first computer you ever used, and whose was it?', flat: 'household · device ownership' },
+    '1993': { label: 'who showed you', who: 'someone who was there', memory: 'He sat people down at a browser and showed them the weather in another country. That was the whole demonstration, and it was enough.',
+      ask: 'Who first showed you something on the internet? What was it?', flat: 'social graph · early adopter contact' },
+    '1996': { label: 'paper', who: 'someone who was there', memory: 'Work still ran on fax machines and physical paperwork. Things had to be printed, signed and sent.',
+      ask: 'What did you (or your family) used to do on paper that now happens on a screen?', flat: 'lifestyle · analog to digital' },
+    '1999': { label: 'the first purchase', who: 'someone who was there', memory: 'Typing a credit card number into a website felt like a real risk. The shop only sold books then.',
+      ask: 'What was the first thing you or your family bought online? Was anyone nervous?', flat: 'commerce · first purchase · trust signal' },
+    '2004': { label: 'a game you can’t open', who: 'someone who grew up online', memory: 'The Flash games are not outdated so much as unreachable. The thing they ran on is gone from ordinary computers.',
+      ask: 'What is a game or a site you loved that you can’t open anymore?', flat: 'entertainment · legacy content' },
+    '2006': { label: 'your first page', who: 'someone who grew up online', memory: 'A pet site and a profile page were where she first made something online that looked like her.',
+      ask: 'What did your first profile or page look like? What was on it?', flat: 'identity · self-presentation' },
+    '2008': { label: 'found again', who: 'someone who was there', memory: 'A social network let him find old friends he had lost touch with. That part was simply good.',
+      ask: 'Who did the internet help you find again?', flat: 'social graph · reconnected tie' },
+    '2010': { label: 'where they knew your name', who: 'both of them', memory: 'There were small forums for one narrow interest, with the same few people in them. Most of those are gone or empty now.',
+      ask: 'What was a small corner of the internet where people knew your name?', flat: 'community · niche interest' },
+    '2014': { label: 'left out', who: 'someone who was there', memory: 'When an essential service goes online-only, the older people he knows are the ones who can no longer do it themselves.',
+      ask: 'Who in your life gets left out when something becomes “online only”?', flat: 'household · dependent · accessibility' },
+    '2016': { label: 'locked', who: 'someone who grew up online', memory: 'Doing research for work, she keeps meeting two internets: what is free, and the better thing behind a payment.',
+      ask: 'What is something you wanted to read and couldn’t, because it was paid or locked?', flat: 'intent · unconverted · price sensitive' },
+    '2024': { label: 'a blank page', who: 'someone who grew up online', memory: 'She is a good writer, and she almost never starts from a blank page now. She talks, and the machine tidies it.',
+      ask: 'What is the last thing you wrote entirely by yourself, starting from nothing?', flat: 'content · user-generated · low volume' },
+    '2030': { label: 'handed back', who: 'someone who grew up online', memory: 'She made herself a tool that asks her questions back, because she wanted to keep doing the thinking.',
+      ask: 'What would you want handed back to you, with your name on it?', flat: '' },
+  };
+  // act names in the aesthetic windows that count as MAKING something (it becomes yours, and can be lost)
+  const MAKES = ['launch', 'release', 'upload', 'sign', 'publish', 'submit', 'hang', 'case', 'file', 'post', 'write', 'record', 'screenshot', 'diary', 'lookbook', 'repost', 'session', 'commons', 'outfit'];
+
   /* ---------------- 2030: a guide that asks ---------------- */
   const NOUS = [
     'who is this for, and what would you want them to feel?',
@@ -311,5 +347,5 @@
     [/\s{2,}/g, ' '],
   ];
 
-  window.TS_CONTENT = { CFG, ARRIVAL, THEMES, THINGS, SCENES, FATES, PROFILES, NOUS, POLISH };
+  window.TS_CONTENT = { CFG, ARRIVAL, THEMES, THINGS, SCENES, FATES, PROFILES, NOUS, POLISH, MEMORIES, MAKES };
 })();
