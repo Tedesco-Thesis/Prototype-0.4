@@ -1,5 +1,5 @@
 /* apps.css — the web (per era), paint, kid stamps. Scoped under .app-win so era skins keep the window frame. */
-html body .window.app-win { width: min(560px, 94vw) !important; }
+html body .window.app-win { width: min(var(--app-w, 560px), 94vw) !important; }
 html body .app-win .app-body { padding: 0; max-height: 74vh; overflow: auto; }
 .app-icon { cursor: pointer; }
 .app-icon:focus-visible { outline: 2px dashed currentColor; outline-offset: 2px; }

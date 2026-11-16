@@ -61,7 +61,7 @@ body.era-1993 .titlebar {
   font-family: Arial, Helvetica, sans-serif; font-size: 12px;
   padding: 2px 4px;
 }
-body.era-1993 .titlebar .ttl::before { content: 'NCSA Mosaic: '; font-weight: normal; }
+body.era-1993 .titlebar .ttl::before { content: 'Wayfarer 1.0: '; font-weight: normal; }
 body.era-1993 .winbtns button {
   border: 1px solid #000; background: #c0c0c0;
   box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #808080;
@@ -138,7 +138,7 @@ body.era-1996 .ns-chrome, body.era-1996 .ns-status { display: block; }
 body.era-1996 .newbadge { display: inline; }
 body.era-1996 .marquee, body.era-1996 .bestviewed { display: block; }
 
-body.era-1996 .titlebar .ttl::before { content: 'Netscape - ['; font-weight: normal; }
+body.era-1996 .titlebar .ttl::before { content: 'Wayfarer - ['; font-weight: normal; }
 body.era-1996 .titlebar .ttl::after  { content: ']'; font-weight: normal; }
 body.era-1996 .winbody {
   background: #fff;
@@ -473,3 +473,5 @@ html body .window h2.roomtitle { font-size: calc(var(--t) + 6px); }
    2004 onward: unchanged for now (existing body.era-XXXX rules in style.css).
    Add new blocks below as each era gets its reference.
    --------------------------------------------------------------------- */
+/* phone width: the 1999 portal search wraps instead of pushing the page sideways */
+@media (max-width: 700px) { .dc-search { flex-wrap: wrap; min-width: 0; max-width: 100%; } .dc-search input { width: 90px; min-width: 0; } }

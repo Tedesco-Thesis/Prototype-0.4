@@ -86,3 +86,7 @@ body[data-tod="night"] .icon .label { color: #dfe4ff; }
 @keyframes moteWake { 0% { opacity: .2; filter: grayscale(1) brightness(.6); } 60% { opacity: .6; } 100% { opacity: 1; filter: none; } }
 .g-know { font-style: italic; border-left: 2px solid #cc0000; padding-left: 7px; margin: 6px 0; font-size: 12px; color: #333; }
 .g-ritual-line { min-height: 34px; }
+
+/* the bin slip is a desktop thing: it sits under open windows and never takes clicks */
+#binSlip { z-index: 9 !important; pointer-events: none; }
+@media (max-width: 700px) { body:has(.window.open) #binSlip { display: none; } }

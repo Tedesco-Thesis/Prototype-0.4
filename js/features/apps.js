@@ -178,26 +178,12 @@
     mark();
   }
 
-  /* =============================== icons on the desktop =============================== */
-  const APPS = [
-    { id: 'web', glyph: () => (yr() <= 1999 ? '🧭' : yr() >= 2030 ? '✦' : '🌐'), label: () => (yr() >= 2030 ? 'ask' : 'the web'), from: 1993, to: 2030, open: openWeb },
-    { id: 'paint', glyph: () => '🎨', label: () => 'paint', from: 1993, to: 2010, open: () => openArt('paint') },
-    { id: 'kid', glyph: () => '🖍️', label: () => 'kid stamps', from: 1996, to: 2010, open: () => openArt('kid') },
-  ];
-  function icons() {
-    const d = $('#desktop'); if (!d) return; const y = yr(); let n = 0;
-    APPS.forEach((a) => {
-      let el = $('.app-icon[data-app="' + a.id + '"]', d);
-      if (!el) { el = document.createElement('div'); el.className = 'icon app-icon'; el.dataset.app = a.id; el.tabIndex = 0; el.setAttribute('role', 'button'); el.onclick = a.open; el.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); a.open(); } }; d.appendChild(el); }
-      const on = y >= a.from && y <= a.to; el.style.display = on ? '' : 'none';
-      if (on) { el.innerHTML = '<div class="glyph">' + a.glyph() + '</div><div class="label">' + a.label() + '</div>'; el.style.left = '200px'; el.style.top = (12 + n * 106) + 'px'; n++; }
-    });
-    // an open app that doesn't exist in this era closes; the browser redraws in the new era's clothes
-    ['win-paint', 'win-kid'].forEach((id, i) => { const w = $('#' + id), a = APPS[i + 1]; if (w && w.classList.contains('open') && (y < a.from || y > a.to) && typeof closeWindow === 'function') closeWindow(id); });
-    const wb = $('#win-web'); if (wb && wb.classList.contains('open')) { web.hist = []; drawWeb(web.q ? 'results' : 'home'); }
-  }
-  let lastEra = null;
-  function init() { icons(); new MutationObserver(() => { if (era() !== lastEra) { lastEra = era(); icons(); } }).observe(document.body, { attributes: true, attributeFilter: ['class'] }); }
+  /* =============================== icons on the desktop (placed by kit.js) =============================== */
+  const K = window.TSKit;
+  K.icon({ id: 'web', glyph: (y) => (y <= 1999 ? '🧭' : y >= 2030 ? '✦' : '🌐'), label: (y) => (y >= 2030 ? 'ask' : 'the web'), from: 1993, to: 2030, open: openWeb });
+  K.icon({ id: 'paint', glyph: '🎨', label: 'paint', from: 1993, to: 2010, open: () => openArt('paint') });
+  K.icon({ id: 'kid', glyph: '🖍️', label: 'kid stamps', from: 1996, to: 2010, open: () => openArt('kid') });
+  // an open app that doesn't exist in this era closes; the browser redraws in the new era's clothes
+  K.onEra(() => { const y = yr(); if (y < 1993 || y > 2010) K.hide('win-paint'); if (y < 1996 || y > 2010) K.hide('win-kid'); if (K.isOpen('win-web')) { web.hist = []; drawWeb(web.q ? 'results' : 'home'); } });
   window.Apps = { openWeb, openArt, group };
-  if (document.readyState !== 'loading') init(); else document.addEventListener('DOMContentLoaded', init);
 })();

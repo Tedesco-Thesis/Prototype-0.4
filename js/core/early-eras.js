@@ -281,8 +281,8 @@ splash.addEventListener('click', () => { if (splashReady) hideSplash1999(); });
     const foot = document.createElement('div');
     foot.className = 'dc-foot';
     foot.innerHTML = `
-      <span class="dc-badge n">Netscape NOW!</span>
-      <span class="dc-badge e">Get IE 5</span>
+      <span class="dc-badge n">Wayfarer NOW!</span>
+      <span class="dc-badge e">Get Explora 5</span>
       <span class="dc-badge r">800\u00d7600</span>
       <span class="dc-hits">visitors: <span class="counter">hits: 004812</span></span>`;
     w.appendChild(foot);

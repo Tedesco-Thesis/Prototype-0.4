@@ -55,5 +55,37 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
   await p.evaluate(() => Store.destroyAll());
   ok(await p.evaluate(() => Journey.mine().length === 0 && Object.keys(Whimsy.state().found).length === 0 && !Whimsy.state().left), 'delete-everything erases yours and the finds');
   ok(errs.length === 0, 'no page errors ' + JSON.stringify(errs));
-  await b.close(); console.log(fails ? fails + ' FAILED' : 'ALL PASSED'); process.exit(fails ? 1 : 0);
+  await b.close(); console.log(fails ? fails + ' FAILED' : 'ALL PASSED'); if (fails) process.exitCode = 1;
+})();
+// ---- 0.10: your year, bring one thing, the shelf between sessions, two rooms ----
+(async () => {
+  const { chromium } = require('playwright'); const path = require('path');
+  const URL = 'file://' + path.resolve(__dirname, '../index.html') + '#journey&quick';
+  let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); if (!c) { fails++; process.exitCode = 1; } };
+  const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+  const errs = []; p.on('pageerror', (e) => errs.push(e.message)); await p.route(/fonts\.g/, (r) => r.abort());
+  await p.goto(URL); await p.evaluate(() => localStorage.clear()); await p.reload();
+  await p.evaluate(() => setEra('1993')); await p.waitForSelector('#jyBorn');
+  await p.fill('#jyBorn', '2005'); await p.fill('#jyBringA', 'the penguin game');
+  await p.click('[data-a=free]');
+  ok(await p.evaluate(() => Journey.yourEra() === '2014' && !!document.querySelector('.era-btn.jy-mine-era[data-era="2014"]')), 'born 2005: 2014 is marked as their era');
+  ok(await p.evaluate(() => Journey.mine().some((m) => m.id === 'Y-brought' && m.era === '2014' && /penguin/.test(m.line))), 'the thing they brought becomes theirs, in their era');
+  await p.evaluate(() => setEra('2014')); await p.waitForTimeout(1700);
+  ok(await p.evaluate(() => /this one was yours/.test(document.getElementById('jyToast').textContent)), 'mote greets them in their era');
+  await p.evaluate(() => Journey.open('people'));
+  ok((await p.$$('.jy-roomcard')).length === 2, 'two rooms, one per interview');
+  await p.click('.jy-roomcard'); await p.click('#win-things [data-act=toy-weather]');
+  ok(/whole demonstration/.test(await p.textContent('#jyToy')), 'the weather demonstration works in his room');
+  await p.click('.jy-room-obj[data-i="1"]'); ok(/fax/.test(await p.textContent('.jy-room-mem')), 'each object is one memory');
+  await p.click('#win-things [data-act=room-go]'); ok(await p.evaluate(() => /era-1996/.test(document.body.className)), 'an object takes you to its year');
+  // leave one for the next person; it survives "erase journey" and is found by the next visitor
+  await p.evaluate(() => { setEra('2030'); Journey.open('yours'); });
+  await p.check('#jyLeaveOk'); await p.click('#win-things [data-act=leave]');
+  ok(await p.evaluate(() => Journey.shelf().length === 1), 'a thing can be left, unsigned, only after ticking the box');
+  await p.evaluate(() => Journey.reset()); await p.reload();
+  await p.evaluate(() => { Journey.free(); setEra('2014'); Journey.open('here'); });
+  ok(/left by someone before you/.test(await p.textContent('#jyMain')) && /penguin/.test(await p.textContent('#jyMain')), 'the next person finds it in its year');
+  await p.evaluate(() => Store.destroyAll()); ok(await p.evaluate(() => Journey.shelf().length === 0), 'delete-everything empties the shelf too');
+  ok(errs.length === 0, 'no page errors ' + JSON.stringify(errs));
+  await b.close(); console.log(fails ? fails + ' FAILED (0.10)' : 'ALL PASSED (0.10)');
 })();

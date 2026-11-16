@@ -315,3 +315,32 @@ body.era-2024 .ts-why::before { content: 'why: not shown'; font-size: 11px; colo
 body.era-1991 #win-things { z-index: 3100 !important; }
 body.era-1991 #jyBtn, body.era-1991 #jyPocket, body.era-1991 #jyToast { z-index: 3090; }
 .jy-thumb { display: block; max-width: 160px; border: 1px solid #999; margin: 4px 0; image-rendering: pixelated; }
+
+/* ===== 0.10 — your year, bring one thing, the shelf, two rooms ===== */
+.jy-you { display: grid; grid-template-columns: 1fr 1.6fr; gap: 10px; grid-column: 1 / -1; font: 12px/1.3 'Courier New', monospace; }
+.jy-you label { display: block; } .jy-you .field { display: block; width: 100%; box-sizing: border-box; margin-top: 3px; }
+.era-btn.jy-mine-era::after { content: ' \2665'; color: #e0245e; }
+.jy-yoursera { background: #ffe3ec; border-left: 4px solid #e0245e; padding: 5px 8px; margin: 6px 0; font: 17px/1.2 'Caveat', 'Comic Sans MS', cursive; color: #5a0f27; }
+.jy-bring { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; background: #fff27a; padding: 8px 10px; margin: 8px 0; box-shadow: 2px 3px 6px rgba(0,0,0,.18); color: #2a2400; }
+.jy-bring label { flex: 1 1 100%; font-size: 13px; } .jy-bring .field { flex: 1; min-width: 120px; }
+.jy-leave { border: 1px dashed #7fb069; background: #f4fff0; padding: 8px 10px; margin: 10px 0; font-size: 13px; color: #1d3b1a; } .jy-leave small { display: block; color: #4a6a45; margin: 2px 0 6px; }
+.jy-leave-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; } .jy-leave-row select { max-width: 100%; }
+.jy-rooms { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 6px 0 12px; }
+.jy-roomcard { text-align: left; padding: 12px; border: 2px solid #222; cursor: pointer; font: inherit; color: #222; display: flex; flex-direction: column; gap: 3px; min-height: 96px; box-shadow: 3px 3px 0 rgba(0,0,0,.25); }
+.jy-roomcard span { font-size: 12px; } .jy-roomcard i { font-style: normal; font-size: 20px; margin-top: auto; }
+.jy-roomcard:hover, .jy-roomcard:focus-visible { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 rgba(0,0,0,.3); outline: none; }
+.r-office { background: linear-gradient(#d9d2bd 0 62%, #8a6a45 62% 66%, #b89468 66%); }
+.r-bedroom { background: linear-gradient(#ffd9ec 0 62%, #7b5ea7 62% 66%, #c9b6e4 66%); background-image: radial-gradient(#fff8 2px, transparent 2.5px), linear-gradient(#ffd9ec 0 62%, #7b5ea7 62% 66%, #c9b6e4 66%); background-size: 22px 22px, auto; }
+.jy-room { margin-top: 8px; padding: 12px; border: 2px solid #222; color: #222; }
+.jy-room-who { margin: 0 0 14px; font-size: 13px; background: rgba(255,255,255,.75); padding: 5px 8px; }
+.jy-room-desk { display: flex; justify-content: space-around; align-items: flex-end; gap: 6px; padding: 26px 4px 10px; flex-wrap: wrap; }
+.jy-room-obj { background: none; border: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; font: 11px/1.2 'Courier New', monospace; color: #222; padding: 4px; width: 86px; animation: jyObjIn .5s cubic-bezier(.2,1.5,.4,1) both; animation-delay: calc(var(--i) * .08s); }
+.jy-room-obj i { font-style: normal; font-size: 34px; filter: drop-shadow(2px 3px 0 rgba(0,0,0,.25)); transition: transform .2s; }
+.jy-room-obj:hover i, .jy-room-obj:focus-visible i { transform: translateY(-5px) rotate(-6deg); } .jy-room-obj.on i { transform: translateY(-8px) scale(1.15); }
+.jy-room-obj.on span { background: #222; color: #fff; padding: 1px 4px; } .jy-room-obj:focus-visible { outline: 2px dashed #222; }
+@keyframes jyObjIn { from { opacity: 0; transform: translateY(14px); } }
+.jy-room-mem { background: #fffdf6; border: 1px solid #b9b09a; padding: 10px 12px; margin: 8px 0; box-shadow: 2px 3px 0 rgba(0,0,0,.15); font: 14px/1.45 Georgia, serif; } .jy-room-mem p { margin: 4px 0 8px; font-style: italic; }
+.jy-toy { margin: 8px 0; } .jy-toy.weather #jyToy { font: 14px 'Courier New', monospace; background: #111; color: #7CFC00; padding: 6px 8px; min-height: 1.4em; margin-top: 6px; }
+.jy-toy.blank textarea { width: 100%; box-sizing: border-box; font: 15px/1.4 Georgia, serif; padding: 8px; border: 1px solid #ccc; background: #fff; } .jy-toy small { color: #666; font-style: normal; }
+@media (max-width: 700px) { .jy-you, .jy-rooms { grid-template-columns: 1fr; } .jy-room-obj { width: 64px; } }
+@media (prefers-reduced-motion: reduce) { .jy-room-obj { animation: none; } }

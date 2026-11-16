@@ -9,9 +9,9 @@ let fails = 0; const ok = (c, m) => { console.log((c ? 'PASS ' : 'FAIL ') + m); 
   await p.goto(URL); await p.evaluate(() => localStorage.clear()); await p.reload();
   const go = async (k) => { await p.evaluate((k) => { setEra(k); document.querySelectorAll('[id^=era].show').forEach((x) => x.classList.remove('show')); }, k); };
   const icons = () => p.evaluate(() => [...document.querySelectorAll('.app-icon')].filter((e) => e.style.display !== 'none').map((e) => e.dataset.app).join(','));
-  await go('1993'); ok(await icons() === 'web,paint', '1993 has the web and paint');
-  await go('1996'); ok(await icons() === 'web,paint,kid', '1996 adds kid stamps');
-  await go('2016'); ok(await icons() === 'web', '2016 has only the web');
+  await go('1993'); { const i = (await icons()).split(','); ok(i.includes('web') && i.includes('paint') && !i.includes('kid'), '1993 has the web and paint'); }
+  await go('1996'); ok((await icons()).split(',').includes('kid'), '1996 adds kid stamps');
+  await go('2016'); { const i = (await icons()).split(','); ok(i.includes('web') && !i.includes('paint') && !i.includes('kid'), '2016 has the web but no paint or kid stamps'); }
   const search = async (k, q) => { await go(k); await p.evaluate(() => Apps.openWeb()); if (await p.$('#wbQ')) { await p.fill('#wbQ', q); await p.evaluate(() => document.querySelector('#win-web form').requestSubmit()); } return p.textContent('#wbView'); };
   ok(/Host not found/.test(await search('1993', 'cats')), '1993: there is no search, only a list');
   ok(/Found 14 sites/.test(await search('1996', 'cats')) && /UNDER CONSTRUCTION/.test(await p.textContent('#wbView')), '1996: a portal with hand-filed home pages');

@@ -36,6 +36,7 @@
     notes: [
       'What it keeps, shown to you at the end: the three things you choose each time, how long you took to choose, and a line you may write about why.',
       'Also anything you write when it asks you a question, and what you make in the aesthetic windows. Those become yours, and can be lost like everything else.',
+      'If you tell it your birth year or bring something of your own, that is kept the same way.',
       'It stays in this browser. Nothing is sent anywhere, and there is no account.',
       'The systems in this prototype are simulations of how platforms behave, and they say so. The people and wording are placeholders.',
       'You can look around without the journey, read what it kept at any time, export it, or erase it.',
@@ -330,6 +331,19 @@
     '2030': { label: 'handed back', who: 'someone who grew up online', memory: 'She made herself a tool that asks her questions back, because she wanted to keep doing the thinking.',
       ask: 'What would you want handed back to you, with your name on it?', flat: '' },
   };
+
+  /* ---------------- two rooms, built from the two interviews ----------------
+     Stand-ins. Each object in a room is one memory from MEMORIES (paraphrased, not quoted). Before showing
+     publicly: each person checks their room, chooses how they appear, and supplies their own words. */
+  const ROOMS = [
+    { id: 'R-there', who: 'someone who was there', sub: 'on the network before it had pictures', look: 'office',
+      intro: 'a desk in an office, early nineties. a beige monitor, a fax machine, a lot of paper.',
+      objects: [{ icon: '🖥️', era: '1993', label: 'the monitor', toy: 'weather' }, { icon: '📠', era: '1996', label: 'the fax machine' }, { icon: '💳', era: '1999', label: 'a credit card' }, { icon: '👥', era: '2008', label: 'an old photograph' }, { icon: '☎️', era: '2014', label: 'a phone that still has buttons' }] },
+    { id: 'R-grew', who: 'someone who grew up online', sub: 'the family computer was already there', look: 'bedroom',
+      intro: 'a bedroom desk, mid two-thousands. a shared family computer, stickers on the tower, homework somewhere.',
+      objects: [{ icon: '🎮', era: '2004', label: 'a game that won’t open' }, { icon: '🐾', era: '2006', label: 'her first page' }, { icon: '🔒', era: '2016', label: 'a locked article' }, { icon: '📄', era: '2024', label: 'a blank page', toy: 'blank' }, { icon: '❓', era: '2030', label: 'a tool that asks back' }] },
+  ];
+
   // act names in the aesthetic windows that count as MAKING something (it becomes yours, and can be lost)
   const MAKES = ['launch', 'release', 'upload', 'sign', 'publish', 'submit', 'hang', 'case', 'file', 'post', 'write', 'record', 'screenshot', 'diary', 'lookbook', 'repost', 'session', 'commons', 'outfit'];
 
@@ -347,5 +361,5 @@
     [/\s{2,}/g, ' '],
   ];
 
-  window.TS_CONTENT = { CFG, ARRIVAL, THEMES, THINGS, SCENES, FATES, PROFILES, NOUS, POLISH, MEMORIES, MAKES };
+  window.TS_CONTENT = { CFG, ARRIVAL, THEMES, THINGS, SCENES, FATES, PROFILES, NOUS, POLISH, MEMORIES, MAKES, ROOMS };
 })();
