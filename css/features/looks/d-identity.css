@@ -74,7 +74,7 @@
 #win-c-softgrunge .sg-pol {margin:0; width:min(250px,82%); padding:10px 10px 6px; background:#E8E1DE; box-shadow:2px 6px 14px rgba(0,0,0,.6); transform:rotate(-2deg)}
 #win-c-softgrunge .sg-arch li:nth-child(even) .sg-pol {transform:rotate(2.5deg)}
 #win-c-softgrunge .sg-pol .sg-ph {height:170px; filter:grayscale(.7) contrast(1.2) sepia(.15)}
-#win-c-softgrunge .sg-pol figcaption {min-height:1em; padding-top:6px; font:700 19px/1.15 'Caveat',cursive; color:#2B292B}
+#win-c-softgrunge .sg-pol figcaption {min-height:1em; padding-top:6px; font:700 19px/1.15 var(--ts-hand); color:#2B292B}
 #win-c-softgrunge .sg-arch small {font-size:11px; color:#d06f77}
 #win-c-softgrunge .sg-arch em {font:italic 11px Lora,serif; color:#9a8f92}
 #win-c-softgrunge .sg-arch .sg-empty {padding:24px 0; font:italic 14px Lora,serif; color:#C6B7B0}
@@ -214,7 +214,7 @@
 #win-c-studyblr .winbody {background:#efe7da}
 #win-c-studyblr .st-room {color:#454A43}
 #win-c-studyblr .st-head {padding:14px 18px 2px}
-#win-c-studyblr .st-head h3 {font:700 30px/1 'Caveat',cursive}
+#win-c-studyblr .st-head h3 {font:700 30px/1 var(--ts-hand)}
 #win-c-studyblr .st-head p {font:12px 'DM Mono',monospace; color:#7d8279}
 #win-c-studyblr .st-grid {display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:16px 12px; padding:16px 16px 4px}
 #win-c-studyblr .st-card {position:relative; padding:14px; border-radius:4px; background:radial-gradient(#ddd5c6 1px,transparent 1.3px) 0 0/14px 14px,#fffdf8; box-shadow:0 2px 0 #e2d9c8,0 6px 14px rgba(69,74,67,.08)}
@@ -246,12 +246,12 @@
 #win-c-studyblr .st-moist i {display:block; height:100%; background:#8fb7d4; transition:width .6s}
 #win-c-studyblr .st-water {padding:4px 14px; border:1.5px solid #454A43; border-radius:20px; font:700 12px 'Nunito Sans',sans-serif}
 #win-c-studyblr .st-list {list-style:none; margin:0; padding:0}
-#win-c-studyblr .st-list button {display:flex; align-items:center; gap:9px; width:100%; padding:1px 0; text-align:left; font:400 22px/1.2 'Caveat',cursive; animation:st-in .4s}
+#win-c-studyblr .st-list button {display:flex; align-items:center; gap:9px; width:100%; padding:1px 0; text-align:left; font:400 22px/1.2 var(--ts-hand); animation:st-in .4s}
 #win-c-studyblr .st-list button::before {content:''; flex:none; width:14px; height:14px; border:1.5px solid #454A43; border-radius:3px; background:#fff}
 #win-c-studyblr .st-list button[aria-pressed=true]::before {background:#A7C4A0; box-shadow:inset 0 0 0 2px #fff}
 #win-c-studyblr .st-list button[aria-pressed=true] span {text-decoration:line-through; text-decoration-color:#E6B6B2; text-decoration-thickness:3px; opacity:.65}
 #win-c-studyblr .st-add {display:flex; gap:6px; margin-top:8px}
-#win-c-studyblr .st-add input {flex:1; min-width:0; padding:2px; border:0; border-bottom:1.5px dashed #b9b1a2; background:transparent; color:#454A43; font:21px 'Caveat',cursive}
+#win-c-studyblr .st-add input {flex:1; min-width:0; padding:2px; border:0; border-bottom:1.5px dashed #b9b1a2; background:transparent; color:#454A43; font:21px var(--ts-hand)}
 #win-c-studyblr .st-add button {padding:2px 12px; border:1.5px solid #454A43; border-radius:20px; font:700 12px 'Nunito Sans',sans-serif}
 #win-c-studyblr .st-hl {display:flex; gap:8px; margin-bottom:8px}
 #win-c-studyblr .st-hl button {width:36px; height:14px; border-radius:2px 8px 8px 2px; background:var(--c); transition:transform .15s}
@@ -261,7 +261,7 @@
 #win-c-studyblr .st-s[aria-pressed=true] {background-size:100% 100%}
 #win-c-studyblr .st-s:hover {text-decoration:underline dotted #b9b1a2}
 #win-c-studyblr .st-done {display:grid; gap:2px; margin:12px 16px 0; padding:10px 14px; border:2px dashed #A7C4A0; background:#fffdf8; font-size:13px; animation:st-in .5s}
-#win-c-studyblr .st-done b {font:700 26px 'Caveat',cursive}
+#win-c-studyblr .st-done b {font:700 26px var(--ts-hand)}
 #win-c-studyblr .st-done small {font:11px 'DM Mono',monospace; color:#7d8279}
 
 /* ================= coquette: bow, flat-lay, ribboned diary ================= */
@@ -318,12 +318,12 @@
 #win-c-coquette .cq-ribbon {position:absolute; top:-6px; bottom:-10px; right:22px; width:12px; background:var(--rib); box-shadow:inset 0 0 0 1px rgba(110,70,87,.25); clip-path:polygon(0 0,100% 0,100% 100%,50% calc(100% - 7px),0 100%)}
 #win-c-coquette .cq-date {text-align:right; font:italic 14px 'Cormorant Garamond',serif; color:#B88B9A}
 #win-c-coquette .cq-book label {display:block; font:italic 18px 'Cormorant Garamond',serif}
-#win-c-coquette .cq-line {display:block; width:100%; box-sizing:border-box; margin-top:2px; padding:0; border:0; background:transparent; color:#6E4657; font:22px/28px 'Caveat',cursive; resize:vertical}
+#win-c-coquette .cq-line {display:block; width:100%; box-sizing:border-box; margin-top:2px; padding:0; border:0; background:transparent; color:#6E4657; font:22px/28px var(--ts-hand); resize:vertical}
 #win-c-coquette .cq-close {margin-top:8px; padding:4px 16px; border-radius:20px; background:#B88B9A; color:#fff; font:italic 16px 'Cormorant Garamond',serif}
 #win-c-coquette .cq-pages {list-style:none; display:grid; gap:6px; margin:10px 0 0; padding:0}
 #win-c-coquette .cq-pages li {padding:6px 10px; border-left:3px solid var(--rib); background:#FFF8F5}
 #win-c-coquette .cq-pages small {font:italic 13px 'Cormorant Garamond',serif; color:#B88B9A}
-#win-c-coquette .cq-pages p {font:20px/1.2 'Caveat',cursive; overflow-wrap:anywhere}
+#win-c-coquette .cq-pages p {font:20px/1.2 var(--ts-hand); overflow-wrap:anywhere}
 #win-c-coquette .dw-live {font-style:italic; font-size:14px; text-align:center}
 
 /* ================= baddie: the get-ready-with-me card ================= */

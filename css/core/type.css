@@ -1,0 +1,54 @@
+/* type.css: the project's own typefaces, self-hosted so the prototype works offline.
+   (Each era still uses its period fonts; these are for the project's voice and the 2030 worlds.)
+
+   FK Raster Grotesk Sharp (Florian Karsten, trial) and ABC Areal (Dinamo for Are.na) are licensed, so they are not bundled.
+   Drop the files into /fonts with the names below, or install them on the presenting computer: the local() names pick them up.
+   Until then the fallbacks shown in each stack are used.
+
+   National Park (OFL) and Nanum Pen Script (OFL) are bundled; licences are in /fonts. */
+
+@font-face {
+  font-family: 'National Park';
+  src: url('../../fonts/NationalPark-Variable.woff2') format('woff2');
+  font-weight: 200 800; font-display: swap;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'National Park';
+  src: url('../../fonts/NationalPark-Variable-ext.woff2') format('woff2');
+  font-weight: 200 800; font-display: swap;
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+1E00-1E9F, U+20A0-20AB, U+20AD-20C0, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* The visitor's handwriting (was Caveat). Nanum Pen Script draws small, so it is scaled up to sit at the same sizes. */
+@font-face {
+  font-family: 'Nanum Pen Script';
+  src: url('../../fonts/NanumPenScript-Regular.woff2') format('woff2');
+  font-weight: 400 700; font-display: swap; size-adjust: 128%;
+}
+
+@font-face {
+  font-family: 'FK Raster Grotesk Sharp';
+  src: local('FK Raster Grotesk Trial Sharp'), local('FKRasterGroteskTrial-Sharp'), local('FK Raster Grotesk Sharp'), local('FKRasterGrotesk-Sharp'),
+       url('../../fonts/FKRasterGroteskTrial-Sharp.woff2') format('woff2'), url('../../fonts/FKRasterGroteskTrial-Sharp.otf') format('opentype');
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Areal';
+  src: local('ABC Areal'), local('ABCAreal-Regular'), local('Areal'), local('Areal-Regular'),
+       url('../../fonts/ABCAreal-Regular.woff2') format('woff2'), url('../../fonts/ABCAreal-Regular.otf') format('opentype');
+  font-weight: 400; font-display: swap;
+}
+@font-face {
+  font-family: 'Areal';
+  src: local('ABC Areal Bold'), local('ABCAreal-Bold'), local('Areal Bold'), local('Areal-Bold'),
+       url('../../fonts/ABCAreal-Bold.woff2') format('woff2'), url('../../fonts/ABCAreal-Bold.otf') format('opentype');
+  font-weight: 700; font-display: swap;
+}
+
+:root {
+  --ts-raster: 'FK Raster Grotesk Sharp', 'IBM Plex Mono', 'Courier New', monospace;
+  --ts-park: 'National Park', 'Helvetica Neue', Arial, sans-serif;
+  --ts-areal: 'Areal', Arial, 'Helvetica Neue', sans-serif;
+  --ts-hand: 'Nanum Pen Script', 'Comic Sans MS', cursive;
+}

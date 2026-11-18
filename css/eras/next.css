@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&family=Caveat:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=IBM+Plex+Mono:wght@400;500&display=swap');
 /* next.css — "the next web" (2030), the speculative era. Scoped to body.era-2030. Markup + logic: js/eras/next.js.
 
    The four worlds each get their own design system, set by a class on <body> (w-delegation, w-commons, w-provenance,
@@ -14,8 +14,8 @@ body.era-2030 {
   --bg: #ece8f1; --paper: #f7f5f2; --ink: #1d1b22; --mute: #6d6a76; --line: #ddd8e6; --acc: #6c63ff; --acc2: #f06a4f; --accink: #fff;
   --fd: 'Inter', 'Helvetica Neue', Arial, sans-serif; --fb: 'Inter', 'Helvetica Neue', Arial, sans-serif; --fm: 'IBM Plex Mono', 'Courier New', monospace; --r: 14px; --shadow: 0 10px 34px rgba(60,50,110,.16);
 }
-body.era-2030.w-commons    { --bg: #e6e0d2; --paper: #f4f0e8; --ink: #2a2a22; --mute: #6f6a58; --line: #cfc7b4; --acc: #4f7d66; --acc2: #f06a4f; --accink: #fff; --fd: 'Fraunces', Georgia, serif; --r: 2px; --shadow: 0 2px 0 rgba(0,0,0,.12); }
-body.era-2030.w-provenance { --bg: #101214; --paper: #17191c; --ink: #e8e8ea; --mute: #9a9ea6; --line: #2d3036; --acc: #6c63ff; --acc2: #f06a4f; --accink: #fff; --fd: 'Space Grotesk', 'Helvetica Neue', sans-serif; --r: 0px; --shadow: 0 0 0 1px #2d3036; }
+body.era-2030.w-commons    { --bg: #e6e0d2; --paper: #f4f0e8; --ink: #2a2a22; --mute: #6f6a58; --line: #cfc7b4; --acc: #4f7d66; --acc2: #f06a4f; --accink: #fff; --fd: var(--ts-park); --fb: var(--ts-areal); --r: 2px; --shadow: 0 2px 0 rgba(0,0,0,.12); }
+body.era-2030.w-provenance { --bg: #101214; --paper: #17191c; --ink: #e8e8ea; --mute: #9a9ea6; --line: #2d3036; --acc: #6c63ff; --acc2: #f06a4f; --accink: #fff; --fd: var(--ts-raster); --r: 0px; --shadow: 0 0 0 1px #2d3036; }
 body.era-2030.w-museum     { --bg: #d9d6ce; --paper: #f7f5ef; --ink: #111; --mute: #5d5b55; --line: #111; --acc: #111; --acc2: #6c63ff; --accink: #fff; --fd: 'Fraunces', Georgia, serif; --r: 0px; --shadow: 0 1px 0 #111; }
 
 /* ---------- ground ---------- */
@@ -106,7 +106,7 @@ html body.era-2030 #win-world .nw-tabs button.active { color: var(--ink) !import
 .w-delegation .nw-hero { background: radial-gradient(ellipse 60% 90% at 100% 0, rgba(108,99,255,.14), transparent 70%), radial-gradient(ellipse 50% 70% at 0 100%, rgba(240,106,79,.10), transparent 70%); margin: 0 -20px; padding: 26px 20px 22px; }
 .w-delegation .nw-btn { border-radius: 999px !important; padding: 10px 20px !important; }
 .w-commons .nw-hero p::first-letter { font-size: 1.2em; }
-.w-commons .nw-hero h1::after { content: 'someone is here →'; display: block; font: 500 22px 'Caveat', cursive; color: var(--acc2); transform: rotate(-2deg); margin-top: 8px; letter-spacing: 0; }
+.w-commons .nw-hero h1::after { content: 'someone is here →'; display: block; font: 500 22px var(--ts-hand); color: var(--acc2); transform: rotate(-2deg); margin-top: 8px; letter-spacing: 0; }
 .w-provenance .nw-hero { border-left: 3px solid var(--acc); padding-left: 16px; }
 .w-museum .nw-hero { border-top: 4px solid #111; border-bottom: 1px solid #111; }
 .nw-why { border-top: 1px solid var(--line); padding-top: 4px; }
@@ -171,7 +171,7 @@ html body.era-2030 #win-world .nw-rec button:hover { background: var(--ink); col
 .nw-slip b { font: 600 14px var(--fd); display: block; } .nw-slip span { font: 400 11px var(--fm); color: var(--mute); }
 .nw-intro .chain { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .nw-intro .chain i { font: 600 15px var(--fd); font-style: normal; padding: 6px 14px; border: 1px solid var(--ink); } .nw-intro .chain i.me { background: var(--acc); color: #fff; border-color: var(--acc); }
-.nw-intro p { font: 400 13px/1.5 var(--fb); margin: 0 0 6px; } .hand { font: 500 20px 'Caveat', cursive; color: var(--acc2); }
+.nw-intro p { font: 400 13px/1.5 var(--fb); margin: 0 0 6px; } .hand { font: 500 20px var(--ts-hand); color: var(--acc2); }
 .nw-stack { display: flex; height: 54px; border: 1px solid var(--line); }
 .nw-stack .lay { display: flex; align-items: center; padding: 0 8px; min-width: 46px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: 500 10.5px var(--fm); color: #fff; }
 .lay.h, .nw-leg i.h { background: var(--acc2); } .lay.s, .nw-leg i.s { background: var(--acc); }

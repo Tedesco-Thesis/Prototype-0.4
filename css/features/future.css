@@ -26,7 +26,7 @@ html body #win-after .fu-body { max-height: 72vh; overflow: auto; padding: 14px 
 .fu-write textarea, .fu-write input { display: block; width: 100%; box-sizing: border-box; margin-top: 4px; font: inherit; padding: 7px 9px; border: 1px solid #cfc6f2; border-radius: 10px; background: #fff; color: inherit; }
 .fu-draft { min-height: 1em; font-size: 14px; }
 .fu-draft small, .fu-errand small, .fu-env small, .fu-q small { color: #666; font-size: 11.5px; }
-.fu-mine-w { font-family: 'Caveat', 'Comic Sans MS', cursive; font-size: 19px; }
+.fu-mine-w { font-family: var(--ts-hand); font-size: 19px; }
 .fu-its-w { background: linear-gradient(90deg, #e9e3ff, #ffe7dc); border-bottom: 2px dotted #7a6bd6; }
 .fu-ask { font-family: 'Courier New', monospace; color: #8a1c1c; }
 .fu-errand { display: flex; gap: 10px; padding: 8px 0; border-top: 1px solid #eee; }
@@ -71,7 +71,7 @@ html body #win-after .fu-body.fu-pq { background: radial-gradient(circle at 15% 
 .fu-q > b { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: #d6a2ff; margin-bottom: 6px; }
 .fu-qenv { font: inherit; padding: 8px 14px; border-radius: 12px; border: 0; cursor: pointer; color: #0c0f1c; background: linear-gradient(120deg, #8be9fd, #d6a2ff, #ffb3c7, #8be9fd); background-size: 300% 100%; animation: fuShim 4s linear infinite; }
 @keyframes fuShim { to { background-position: -300% 0; } }
-.fu-qmsg { font: 20px/1.3 'Caveat', 'Comic Sans MS', cursive; margin: 8px 0 2px; animation: fuFade 9s ease-in forwards; }
+.fu-qmsg { font: 20px/1.3 var(--ts-hand); margin: 8px 0 2px; animation: fuFade 9s ease-in forwards; }
 .fu-qmsg.scr { font: 16px/1.3 'Courier New', monospace; animation: none; color: #ff7a90; }
 @keyframes fuFade { 0%, 70% { opacity: 1; filter: none; } 100% { opacity: 0; filter: blur(6px); } }
 .fu-gone { font-style: italic; color: #a9b0d6; }

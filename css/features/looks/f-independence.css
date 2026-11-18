@@ -6,7 +6,7 @@
 @keyframes obscura-stamp{0%{transform:rotate(-8deg) scale(1.7);opacity:0}100%{transform:rotate(-8deg) scale(1);opacity:.85}}
 
 /* ---------- solarpunk: the commons map ---------- */
-#win-c-solarpunk {--bg:#E7F1E2; --ink:#234B3A; --acc:#D78D54; --font:'Fraunces','Space Grotesk',serif; --w-bd:3px solid #234B3A; --w-r:60px 60px 8px 8px; --w-sh:0 8px 28px rgba(35,75,58,.45); --tb-bg:#234B3A; --tb-ink:#E6D8A8; --tb-font:600 13px 'Fraunces',serif; --tb-pad:8px 28px 6px; --bt-bd:1px solid #E6D8A8; --bt-ink:#E6D8A8; --bt-r:50%; --foot-bg:#E6D8A8; --foot-font:'DM Sans',sans-serif}
+#win-c-solarpunk {--bg:#E7F1E2; --ink:#234B3A; --acc:#D78D54; --font:'Fraunces','National Park',serif; --w-bd:3px solid #234B3A; --w-r:60px 60px 8px 8px; --w-sh:0 8px 28px rgba(35,75,58,.45); --tb-bg:#234B3A; --tb-ink:#E6D8A8; --tb-font:600 13px 'Fraunces',serif; --tb-pad:8px 28px 6px; --bt-bd:1px solid #E6D8A8; --bt-ink:#E6D8A8; --bt-r:50%; --foot-bg:#E6D8A8; --foot-font:'DM Sans',sans-serif}
 #win-c-solarpunk .sol-sun {position:absolute; right:18px; top:10px; width:54px; height:54px}
 #win-c-solarpunk .sol-sun i {position:absolute; inset:0; border-radius:50%; background:radial-gradient(circle,#E6D8A8 0 40%,transparent 41%),repeating-conic-gradient(#D78D54 0 8deg,transparent 8deg 22deg); animation:solarpunk-ray 40s linear infinite}
 #win-c-solarpunk .sol-head {padding:14px 84px 8px 16px}

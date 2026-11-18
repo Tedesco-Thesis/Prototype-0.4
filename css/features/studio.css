@@ -78,7 +78,7 @@ html body #win-pixfont .st-grid button[aria-pressed=true] { background: #1b2a4a;
 html body #win-pixfont .st-grid button:focus-visible { outline: 2px solid #e2522b; outline-offset: -2px; position: relative; z-index: 1; }
 html body #win-pixfont .st-side { flex: 1; min-width: 180px; }
 html body #win-pixfont .st-prev { padding: 12px 10px 8px; margin: 0 0 10px; background: #fff; border: 1px solid #1b2a4a; color: #1b2a4a; text-align: center; transform: rotate(-1deg); box-shadow: 3px 3px 0 rgba(27,42,74,.25); }
-html body #win-pixfont .st-prev small { display: block; margin-top: 6px; font: 15px 'Caveat', cursive; color: #e2522b; }
+html body #win-pixfont .st-prev small { display: block; margin-top: 6px; font: 15px var(--ts-hand); color: #e2522b; }
 
 /* ---------- 4. glitch a file, 2004–10: a dark hex editor from a forum era ---------- */
 html body #win-glitch .app-body { background: #17191f; }

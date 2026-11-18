@@ -68,7 +68,7 @@ body.era-2024 .ts-why::before { content: 'why: not shown'; font-size: 11px; colo
 .o-floppy::before { content: ''; position: absolute; top: 0; left: 30%; width: 40%; height: 22px; background: linear-gradient(90deg, #b9c0c9 0 60%, #1f2a44 60% 72%, #b9c0c9 72%); border-radius: 0 0 2px 2px; }
 .o-floppy b, .o-floppy em { background: #f4f1e6; color: #1d1d1d; padding: 0 4px; }
 .o-floppy i { top: 4px; left: 6px; z-index: 1; }
-.o-sticky { background: #fff27a; transform: rotate(-2deg); box-shadow: 2px 4px 6px rgba(0,0,0,.2); font-family: 'Caveat', 'Comic Sans MS', cursive; }
+.o-sticky { background: #fff27a; transform: rotate(-2deg); box-shadow: 2px 4px 6px rgba(0,0,0,.2); font-family: var(--ts-hand); }
 .o-sticky b { font-size: 16px; font-weight: 700; }
 .o-banner { width: 160px; min-height: 64px; background: repeating-linear-gradient(-45deg, #ffd23f 0 12px, #ffb000 12px 24px); border: 2px solid #c1272d; color: #2a1200; }
 .o-banner b { background: #fff; padding: 0 4px; }
@@ -182,7 +182,7 @@ body.era-2024 .ts-why::before { content: 'why: not shown'; font-size: 11px; colo
 .jy-screen h2 { color: #fff; font-size: 18px; }
 .jy-screen p { font-size: 13px; }
 @keyframes jyBoot { 0% { filter: brightness(3) blur(2px); clip-path: inset(49% 0 49% 0); } 60% { clip-path: inset(0); } }
-.jy-sticky { background: #fff27a; padding: 10px 12px; transform: rotate(2.5deg); box-shadow: 3px 6px 10px rgba(0,0,0,.25); font: 15px/1.2 'Caveat', 'Comic Sans MS', cursive; color: #2a2400; }
+.jy-sticky { background: #fff27a; padding: 10px 12px; transform: rotate(2.5deg); box-shadow: 3px 6px 10px rgba(0,0,0,.25); font: 15px/1.2 var(--ts-hand); color: #2a2400; }
 .jy-sticky h3 { margin: 0 0 4px; font-size: 21px; }
 .jy-sticky ul { margin: 0; padding-left: 16px; }
 .jy-sticky li { margin-bottom: 4px; }
@@ -251,7 +251,7 @@ body.era-2024 .ts-why::before { content: 'why: not shown'; font-size: 11px; colo
 .th-writing .jy-stage { border-radius: 22px 22px 0 0; border-bottom: 1px solid #ece7f7; }
 .st-writing { background: radial-gradient(circle at 20% 30%, #e9e1ff, transparent 50%), radial-gradient(circle at 80% 70%, #ffe4d6, transparent 50%), #faf8ff; }
 .st-writing p { position: absolute; left: 50%; width: 84%; transform: translateX(-50%); margin: 0; font-size: 16px; text-align: center; }
-.st-writing .mine { top: 46px; font-family: 'Caveat', 'Comic Sans MS', cursive; font-size: 22px; color: #3a2b1a; animation: jyErase 6s ease-in-out infinite; }
+.st-writing .mine { top: 46px; font-family: var(--ts-hand); font-size: 22px; color: #3a2b1a; animation: jyErase 6s ease-in-out infinite; }
 .st-writing .ghost { top: 80px; color: #5b47c7; font-weight: 600; background: linear-gradient(90deg, #5b47c7, #c96b8c, #5b47c7); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; animation: jyShimmer 2.5s linear infinite, jyAppear 6s ease-in-out infinite; }
 .st-writing .caret { position: absolute; left: 50%; top: 46px; width: 2px; height: 24px; background: #5b47c7; animation: jyBlink 1s steps(1) infinite; }
 .st-writing em { color: #7a6bd6; }
@@ -269,7 +269,7 @@ body.era-2024 .ts-why::before { content: 'why: not shown'; font-size: 11px; colo
 .jy-file { font-weight: 700; border-bottom: 2px solid #2b2210; padding-bottom: 4px; }
 .jy-file span { font-weight: 400; }
 .jy-dossier .jy-prof { background: #fbf3dc; border-color: #c9a75a; }
-.jy-dossier .jy-yours { background: #fff27a; border: 0; border-left: 0; padding: 6px 8px; color: #2a2400; font: 17px/1.25 'Caveat', 'Comic Sans MS', cursive; transform: rotate(-1deg); box-shadow: 2px 3px 6px rgba(0,0,0,.2); margin-top: 6px; }
+.jy-dossier .jy-yours { background: #fff27a; border: 0; border-left: 0; padding: 6px 8px; color: #2a2400; font: 17px/1.25 var(--ts-hand); transform: rotate(-1deg); box-shadow: 2px 3px 6px rgba(0,0,0,.2); margin-top: 6px; }
 .jy-dossier h4 { background: #2b2210; color: #f3e2b3; display: inline-block; padding: 1px 6px; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
 
 @media (max-width: 700px) {
@@ -294,15 +294,15 @@ body.era-2024 .ts-why::before { content: 'why: not shown'; font-size: 11px; colo
 .jy-mem small, .jy-mem-yours small { font-size: 10.5px; color: #555; }
 .jy-mem-yours { background: #fff27a; padding: 8px 10px; transform: rotate(.6deg); box-shadow: 2px 3px 6px rgba(0,0,0,.2); color: #2a2400; }
 .jy-mem-yours label { display: block; font-size: 13px; margin-bottom: 5px; }
-.jy-mem-yours textarea { width: 100%; box-sizing: border-box; font: 16px/1.3 'Caveat', 'Comic Sans MS', cursive; background: rgba(255,255,255,.6); border: 1px dashed #8a7a00; margin-bottom: 5px; resize: vertical; }
-.jy-mem-ans { font: 19px/1.25 'Caveat', 'Comic Sans MS', cursive; margin: 2px 0 6px; overflow-wrap: anywhere; }
+.jy-mem-yours textarea { width: 100%; box-sizing: border-box; font: 16px/1.3 var(--ts-hand); background: rgba(255,255,255,.6); border: 1px dashed #8a7a00; margin-bottom: 5px; resize: vertical; }
+.jy-mem-ans { font: 19px/1.25 var(--ts-hand); margin: 2px 0 6px; overflow-wrap: anywhere; }
 .jy-mem-ans.lost { font: 700 13px/1 'Courier New', monospace; text-transform: uppercase; letter-spacing: .1em; color: #8a1c1c; }
 .jy-h { margin: 12px 0 2px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
 .jy-obj.mine { outline: 2px solid #cc0000; outline-offset: 2px; }
 .jy-obj.mine:not(.mini)::before { content: 'yours'; position: absolute; top: -9px; right: -6px; left: auto; width: auto; height: auto; background: #cc0000; color: #fff; font: 700 9px/1 'Courier New', monospace; text-transform: uppercase; letter-spacing: .1em; padding: 3px 5px; border-radius: 2px; transform: rotate(4deg); z-index: 2; }
 .jy-yours-list { list-style: none; padding: 0; margin: 8px 0; }
 .jy-yours-list li { display: flex; gap: 8px; align-items: flex-start; padding: 8px 0; border-bottom: 1px dotted #999; }
-.jy-yours-list p { margin: 2px 0; font: 18px/1.25 'Caveat', 'Comic Sans MS', cursive; overflow-wrap: anywhere; }
+.jy-yours-list p { margin: 2px 0; font: 18px/1.25 var(--ts-hand); overflow-wrap: anywhere; }
 .jy-yours-list small { color: #555; font-size: 11px; }
 .jy-home { background: #f4fff0; border: 1px solid #7fb069; padding: 8px 10px; margin: 6px 0; }
 .jy-home label { display: block; margin-top: 4px; font-size: 12px; }
@@ -320,7 +320,7 @@ body.era-1991 #jyBtn, body.era-1991 #jyPocket, body.era-1991 #jyToast { z-index:
 .jy-you { display: grid; grid-template-columns: 1fr 1.6fr; gap: 10px; grid-column: 1 / -1; font: 12px/1.3 'Courier New', monospace; }
 .jy-you label { display: block; } .jy-you .field { display: block; width: 100%; box-sizing: border-box; margin-top: 3px; }
 .era-btn.jy-mine-era::after { content: ' \2665'; color: #e0245e; }
-.jy-yoursera { background: #ffe3ec; border-left: 4px solid #e0245e; padding: 5px 8px; margin: 6px 0; font: 17px/1.2 'Caveat', 'Comic Sans MS', cursive; color: #5a0f27; }
+.jy-yoursera { background: #ffe3ec; border-left: 4px solid #e0245e; padding: 5px 8px; margin: 6px 0; font: 17px/1.2 var(--ts-hand); color: #5a0f27; }
 .jy-bring { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; background: #fff27a; padding: 8px 10px; margin: 8px 0; box-shadow: 2px 3px 6px rgba(0,0,0,.18); color: #2a2400; }
 .jy-bring label { flex: 1 1 100%; font-size: 13px; } .jy-bring .field { flex: 1; min-width: 120px; }
 .jy-leave { border: 1px dashed #7fb069; background: #f4fff0; padding: 8px 10px; margin: 10px 0; font-size: 13px; color: #1d3b1a; } .jy-leave small { display: block; color: #4a6a45; margin: 2px 0 6px; }
