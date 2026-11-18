@@ -15,7 +15,7 @@ body.era-2030 {
   --fd: 'Inter', 'Helvetica Neue', Arial, sans-serif; --fb: 'Inter', 'Helvetica Neue', Arial, sans-serif; --fm: 'IBM Plex Mono', 'Courier New', monospace; --r: 14px; --shadow: 0 10px 34px rgba(60,50,110,.16);
 }
 body.era-2030.w-commons    { --bg: #e6e0d2; --paper: #f4f0e8; --ink: #2a2a22; --mute: #6f6a58; --line: #cfc7b4; --acc: #4f7d66; --acc2: #f06a4f; --accink: #fff; --fd: var(--ts-park); --fb: var(--ts-areal); --r: 2px; --shadow: 0 2px 0 rgba(0,0,0,.12); }
-body.era-2030.w-provenance { --bg: #101214; --paper: #17191c; --ink: #e8e8ea; --mute: #9a9ea6; --line: #2d3036; --acc: #6c63ff; --acc2: #f06a4f; --accink: #fff; --fd: var(--ts-raster); --r: 0px; --shadow: 0 0 0 1px #2d3036; }
+body.era-2030.w-provenance { --bg: #101214; --paper: #17191c; --ink: #e8e8ea; --mute: #9a9ea6; --line: #2d3036; --acc: #6c63ff; --acc2: #f06a4f; --accink: #fff; --fd: var(--ts-raster); --fm: var(--ts-areal-mono); --r: 0px; --shadow: 0 0 0 1px #2d3036; }
 body.era-2030.w-museum     { --bg: #d9d6ce; --paper: #f7f5ef; --ink: #111; --mute: #5d5b55; --line: #111; --acc: #111; --acc2: #6c63ff; --accink: #fff; --fd: 'Fraunces', Georgia, serif; --r: 0px; --shadow: 0 1px 0 #111; }
 
 /* ---------- ground ---------- */
